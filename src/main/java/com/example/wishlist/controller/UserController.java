@@ -25,8 +25,9 @@ public class UserController {
     }
 
     @GetMapping("login")
-    public String showLoginForm() {
-        return "login";
+    public String showLoginForm(HttpSession session) {
+        // if already logged in, return to front page, else proceed to form
+        return isLoggedIn(session) ? "index" : "login";
     }
 
     @PostMapping("login")
@@ -59,7 +60,12 @@ public class UserController {
     }
 
     @GetMapping("register_user")
-    public String showRegistrationForm(Model model) {
+    public String showRegistrationForm(HttpSession session, Model model) {
+        // if already logged in, return to front page, else proceed to form
+        if (isLoggedIn(session)) {
+            return "index";
+        }
+
         model.addAttribute("user", new User());
         return "user_registration_form";
     }
@@ -98,9 +104,9 @@ public class UserController {
         }
 
         // Proceed with saving the user
-        if(service.registerUser(user)){
+        if (service.registerUser(user)) {
             return "redirect:/login";
-        }else{
+        } else {
             model.addAttribute("registrationFailure", true);
             return "user_registration_form";
         }

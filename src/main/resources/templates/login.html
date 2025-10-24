@@ -8,7 +8,7 @@
 <body>
 <h1>Login</h1>
 <form th:action="@{/login}" method="post">
-    <p th:if="${wrongCredentials}" class="error">Forkert brugernavn/e-mail eller password</p>
+    <div th:if="${wrongCredentials}" class="error">Forkert brugernavn/e-mail eller password</div>
 
     <label for="uid">Brugernavn eller e-mail:</label>
     <input id="uid" type="text" name="uid" autofocus required/>
