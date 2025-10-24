@@ -1,8 +1,19 @@
 package com.example.wishlist.model;
 
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class User {
+    @Size(min=1, max=15, message = "Brugernavn skal være mellem 1 og 15 tegn")
     private String username;
+
+    @Size(min = 6, message = "Password skal være mindst 6 tegn")
     private String password;
+
+    @Email(message = "Ugyldig e-mailadresse")
+    @NotBlank(message = "E-mail må ikke være tom")
     private String email;
 
     public User(){}

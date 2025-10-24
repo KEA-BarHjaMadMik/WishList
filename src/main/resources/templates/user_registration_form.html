@@ -1,0 +1,32 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrer bruger</title>
+    <link th:href="@{/css/main.css}" rel="stylesheet">
+</head>
+<body>
+    <h1>Registrer bruger</h1>
+    <form method="post" th:action="@{/register_user}" th:object="${user}">
+        <label for="username">Brugernavn:</label>
+        <input id="username" type="text" th:field="*{username}" required />
+        <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+        <div class="error" th:if="${usernameTaken}">Brugernavn er allerede i brug.</div>
+
+        <label for="pw">Password:</label>
+        <input id="pw" type="password" th:field="*{password}" required />
+        <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+
+        <label for="confirmPw">Gentag password:</label>
+        <input id="confirmPw" type="password" name="confirmPassword" required />
+        <div class="error" th:if="${passwordMismatch}">Passwords matcher ikke.</div>
+
+        <label for="email">E-mail:</label>
+        <input id="email" type="email" th:field="*{email}" required />
+        <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        <div class="error" th:if="${emailTaken}">E-mail er allerede i brug.</div>
+
+        <button type="submit">Opret</button>
+        <div class="error" th:if="${registrationFailure}">Fejl - kunne ikke registrere brugeren.</div>
+    </form>
+</body>
+</html>

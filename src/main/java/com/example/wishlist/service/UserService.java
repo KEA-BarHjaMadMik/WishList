@@ -25,5 +25,17 @@ public class UserService {
         // Authentication failed — return null
         return null;
     }
+
+    public boolean usernameExists(String username) {
+        return repository.usernameExists(username);
+    }
+
+    public boolean emailExists(String email) {
+        return repository.emailExists(email);
+    }
+
+    public boolean registerUser(User user) {
+        return repository.registerUser(user);
+    }
 }
 

@@ -7,8 +7,8 @@
 </head>
 <body>
 <h1>Login</h1>
-<form th:action="/login" method="post">
-    <p th:if="${wrongCredentials}">Forkert brugerid eller password</p>
+<form th:action="@{/login}" method="post">
+    <p th:if="${wrongCredentials}" class="error">Forkert brugernavn/e-mail eller password</p>
 
     <label for="uid">Brugernavn eller e-mail:</label>
     <input id="uid" type="text" name="uid" autofocus required/>
@@ -18,6 +18,8 @@
 
     <button type="submit">Log på</button>
 </form>
+
+<a th:href="@{/register_user}">Registrer ny bruger</a>
 
 </body>
 </html>
