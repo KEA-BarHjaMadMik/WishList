@@ -2,6 +2,7 @@ package com.example.wishlist.controller;
 
 import com.example.wishlist.model.User;
 import com.example.wishlist.service.UserService;
+import com.example.wishlist.utils.SessionUtils;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -20,14 +21,10 @@ public class UserController {
         this.service = service;
     }
 
-    private static boolean isLoggedIn(HttpSession session) {
-        return session.getAttribute("user") != null;
-    }
-
     @GetMapping("login")
     public String showLoginForm(HttpSession session) {
         // if already logged in, return to front page, else proceed to form
-        return isLoggedIn(session) ? "index" : "login";
+        return SessionUtils.isLoggedIn(session) ? "index" : "login";
     }
 
     @PostMapping("login")
@@ -62,7 +59,7 @@ public class UserController {
     @GetMapping("register_user")
     public String showRegistrationForm(HttpSession session, Model model) {
         // if already logged in, return to front page, else proceed to form
-        if (isLoggedIn(session)) {
+        if (SessionUtils.isLoggedIn(session)) {
             return "index";
         }
 

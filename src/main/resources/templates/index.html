@@ -6,7 +6,10 @@
     <link th:href="@{/css/main.css}" rel="stylesheet">
 </head>
 <body>
+
+<div th:replace="~{fragments/header :: header}">...</div>
+
 <h1>Forside</h1>
-<a th:href="@{/login}">Log på</a>
+
 </body>
 </html>
