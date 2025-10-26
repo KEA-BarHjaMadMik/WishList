@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 @ControllerAdvice
 public class GlobalModelAttributes {
 
-    // Adds 'isLoggedIn' and 'user' attributes to the model for all views
+    // Adds 'isLoggedIn' and 'username' attributes to the model for all views
     @ModelAttribute
     public void addGlobalAttributes(HttpSession session, Model model) {
         boolean isLoggedIn = SessionUtils.isLoggedIn(session);
         model.addAttribute("isLoggedIn", isLoggedIn);
 
         if (isLoggedIn) {
-            model.addAttribute("user", session.getAttribute("user"));
+            model.addAttribute("username", session.getAttribute("username"));
         }
     }
 }

@@ -1,15 +1,14 @@
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Registrer bruger</title>
-    <link th:href="@{/css/main.css}" rel="stylesheet">
+    <title>Brugeradministration</title>
 </head>
 <body>
-
 <div th:replace="~{fragments/header :: header}">...</div>
 
-<h1>Registrer bruger</h1>
-<form method="post" th:action="@{/register_user}" th:object="${newUser}">
+<h1>Din bruger</h1>
+<form method="post" th:action="@{/update_user}" th:object="${user}">
     <label for="username">Brugernavn:</label>
     <input id="username" type="text" th:field="*{username}" required/>
     <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
@@ -28,8 +27,9 @@
     <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
     <div class="error" th:if="${emailTaken}">E-mail er allerede i brug.</div>
 
-    <button type="submit">Opret</button>
+    <button type="submit">Gem</button>
 </form>
-<div class="error" th:if="${registrationFailure}">Noget gik galt. Prøv igen.</div>
+<div th:if="${updateSuccess}">✅ Konto opdateret!</div>
+<div class="error" th:if="${updateFailure}">Noget gik galt. Prøv igen.</div>
 </body>
 </html>

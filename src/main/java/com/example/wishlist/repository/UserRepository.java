@@ -37,7 +37,7 @@ public class UserRepository {
     }
 
 
-    private User getUserByUsername(String username) {
+    public User getUserByUsername(String username) {
         String sql = "SELECT * FROM user_account WHERE username = ?";
 
         RowMapper<User> rowMapper = getUserRowMapper();
@@ -86,6 +86,24 @@ public class UserRepository {
         } catch (DataAccessException e) {
             // Handle any database-related exceptions
             System.err.println("Database error during registration: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean updateUser(String currentUsername, User updatedUser) {
+        String sql = "UPDATE user_account SET username = ?, password = ?, email = ? WHERE username = ?";
+
+        try {
+            int rowsAffected = jdbcTemplate.update(
+                    sql,
+                    updatedUser.getUsername(),
+                    updatedUser.getPassword(),
+                    updatedUser.getEmail(),
+                    currentUsername
+            );
+            return rowsAffected == 1;
+        } catch (DataAccessException e) {
+            System.err.println("Database error during user update: " + e.getMessage());
             return false;
         }
     }

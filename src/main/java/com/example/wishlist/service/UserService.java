@@ -13,10 +13,10 @@ public class UserService {
     }
 
     public User authenticate(String uid, String pw) {
-        // Try to retrieve the user by username or email
+        // Try to retrieve the username by username or email
         User user = repository.getUser(uid);
 
-        // Check if user exists and password matches
+        // Check if username exists and password matches
         if (user != null && user.getPassword().equals(pw)) {
             // Authentication successful — return the full User object
             return user;
@@ -36,6 +36,14 @@ public class UserService {
 
     public boolean registerUser(User user) {
         return repository.registerUser(user);
+    }
+
+    public User getUserByUsername(String username) {
+        return repository.getUserByUsername(username);
+    }
+
+    public boolean updateUser(String currentUsername, User updatedUser) {
+        return repository.updateUser(currentUsername, updatedUser);
     }
 }
 

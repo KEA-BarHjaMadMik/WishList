@@ -5,6 +5,6 @@ import jakarta.servlet.http.HttpSession;
 public class SessionUtils {
 
     public static boolean isLoggedIn(HttpSession session) {
-        return session.getAttribute("user") != null;
+        return session.getAttribute("username") != null;
     }
 }
