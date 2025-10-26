@@ -45,5 +45,9 @@ public class UserService {
     public boolean updateUser(String currentUsername, User updatedUser) {
         return repository.updateUser(currentUsername, updatedUser);
     }
+
+    public boolean changePassword(String username, String newPassword) {
+        return repository.changePassword(username, newPassword);
+    }
 }
 

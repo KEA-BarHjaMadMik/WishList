@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Brugeradministration</title>
+    <link th:href="@{/css/main.css}" rel="stylesheet">
 </head>
 <body>
 <div th:replace="~{fragments/header :: header}">...</div>
@@ -14,14 +15,6 @@
     <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
     <div class="error" th:if="${usernameTaken}">Brugernavn er allerede i brug.</div>
 
-    <label for="pw">Password:</label>
-    <input id="pw" type="password" th:field="*{password}" required/>
-    <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
-
-    <label for="confirmPw">Gentag password:</label>
-    <input id="confirmPw" type="password" name="confirmPassword" required/>
-    <div class="error" th:if="${passwordMismatch}">Passwords matcher ikke.</div>
-
     <label for="email">E-mail:</label>
     <input id="email" type="email" th:field="*{email}" required/>
     <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
@@ -31,5 +24,8 @@
 </form>
 <div th:if="${updateSuccess}">✅ Konto opdateret!</div>
 <div class="error" th:if="${updateFailure}">Noget gik galt. Prøv igen.</div>
+
+<h1>Sikkerhed</h1>
+<a th:href="@{/change_password}">Skift password</a>
 </body>
 </html>

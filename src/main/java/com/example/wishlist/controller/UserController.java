@@ -32,7 +32,7 @@ public class UserController {
                         HttpSession session,
                         Model model) {
 
-        // Attempt to authenticate the username
+        // Attempt to authenticate the user
         User user = service.authenticate(uid, pw);
 
         if (user != null) {
@@ -131,7 +131,6 @@ public class UserController {
     @PostMapping("/update_user")
     public String updateUser(@Valid @ModelAttribute("user") User user,
                              BindingResult bindingResult,
-                             @RequestParam("confirmPassword") String confirmPassword,
                              HttpSession session,
                              Model model) {
         // Ensure user is logged in
@@ -142,8 +141,9 @@ public class UserController {
         // Retrieve current username from session
         String currentUsername = (String) session.getAttribute("username");
 
-        // Check for field validation errors
-        boolean fieldsHaveErrors = bindingResult.hasErrors();
+        // Check for field validation errors (excluding password)
+        boolean fieldsHaveErrors = bindingResult.hasFieldErrors("username") ||
+                bindingResult.hasFieldErrors("email");
 
         // Check if the new username is taken (and not the current one)
         boolean usernameTaken = !user.getUsername().equals(currentUsername) &&
@@ -159,14 +159,8 @@ public class UserController {
             model.addAttribute("emailTaken", true);
         }
 
-        // Check if passwords match
-        boolean passwordMismatch = !user.getPassword().equals(confirmPassword);
-        if (passwordMismatch) {
-            model.addAttribute("passwordMismatch", true);
-        }
-
         // If validation failed, return to form
-        if (fieldsHaveErrors || usernameTaken || emailTaken || passwordMismatch) {
+        if (fieldsHaveErrors || usernameTaken || emailTaken) {
             return "user_admin";
         }
 
@@ -180,5 +174,57 @@ public class UserController {
         }
 
         return "redirect:/user_admin";
+    }
+
+    @GetMapping("/change_password")
+    public String showChangePasswordForm(HttpSession session) {
+        // Ensure user is logged in
+        if (!SessionUtils.isLoggedIn(session)) {
+            return "redirect:/login";
+        }
+
+        return "change_password";
+    }
+
+    @PostMapping("/change_password")
+    public String updateUser(@RequestParam("password") String password,
+                             @RequestParam("newPassword") String newPassword,
+                             @RequestParam("confirmNewPassword") String confirmNewPassword,
+                             HttpSession session,
+                             Model model) {
+
+        // Retrieve username from session
+        String username = (String) session.getAttribute("username");
+        // Attempt to authenticate the user
+        User user = service.authenticate(username, password);
+
+        boolean incorrectPassword = user == null;
+        if (incorrectPassword) {
+            model.addAttribute("incorrectPassword", true);
+        }
+
+        boolean passwordTooShort = newPassword.length() < 6;
+        if(passwordTooShort) {
+            model.addAttribute("passwordTooShort", true);
+        }
+
+        // Check if passwords match
+        boolean passwordMismatch = !newPassword.equals(confirmNewPassword);
+        if (passwordMismatch) {
+            model.addAttribute("passwordMismatch", true);
+        }
+
+        // If validation failed, return to form
+        if (incorrectPassword || passwordTooShort || passwordMismatch) {
+            return "change_password";
+        }
+
+        // Proceed with updating the password
+        if (service.changePassword(username, newPassword)) {
+            return "redirect:/user_admin";
+        } else {
+            model.addAttribute("updateFailure", true);
+            return "change_password";
+        }
     }
 }

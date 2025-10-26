@@ -91,19 +91,30 @@ public class UserRepository {
     }
 
     public boolean updateUser(String currentUsername, User updatedUser) {
-        String sql = "UPDATE user_account SET username = ?, password = ?, email = ? WHERE username = ?";
+        String sql = "UPDATE user_account SET username = ?, email = ? WHERE username = ?";
 
         try {
             int rowsAffected = jdbcTemplate.update(
                     sql,
                     updatedUser.getUsername(),
-                    updatedUser.getPassword(),
                     updatedUser.getEmail(),
                     currentUsername
             );
             return rowsAffected == 1;
         } catch (DataAccessException e) {
             System.err.println("Database error during user update: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean changePassword(String username, String password) {
+        String sql = "UPDATE user_account SET password = ? WHERE username = ?";
+
+        try {
+            int rowsAffected = jdbcTemplate.update(sql, password, username);
+            return rowsAffected == 1;
+        } catch (DataAccessException e) {
+            System.err.println("Database error during password change: " + e.getMessage());
             return false;
         }
     }
