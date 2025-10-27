@@ -230,6 +230,11 @@ public class UserController {
 
     @PostMapping("/delete")
     public String deleteUser(HttpSession session, Model model){
+        // Ensure user is logged in
+        if (!SessionUtil.isLoggedIn(session)) {
+            return "redirect:/login";
+        }
+
         // Retrieve username from session
         String username = (String) session.getAttribute("username");
 
