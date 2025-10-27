@@ -1,5 +1,6 @@
 package com.example.wishlist.controller;
 
+import com.example.wishlist.model.WishItem;
 import com.example.wishlist.model.WishList;
 import com.example.wishlist.service.WishListService;
 import com.example.wishlist.utils.SessionUtil;
@@ -29,17 +30,32 @@ public class WishListController {
         String username = (String) session.getAttribute("username");
 
         List<WishList> userWishLists = service.getUserWishLists(username);
-
-        model.addAttribute("userWishLists",userWishLists);
+        if(userWishLists != null) {
+            model.addAttribute("userWishLists",userWishLists);
+        }else {
+            model.addAttribute("queryFailure", true);
+        }
 
         return "wish_lists";
     }
 
     @GetMapping("/wish_list/{wishListId}")
-    public String getWishList(@PathVariable String wishListId, HttpSession session, Model model){
+    public String getWishList(@PathVariable String wishListId, HttpSession session, Model model) {
         // Ensure user is logged in
         if (!SessionUtil.isLoggedIn(session)) {
             return "redirect:/login";
+        }
+
+        // Get wish list and items
+        WishList wishList = service.getWishList(wishListId);
+        List<WishItem> wishListItems = service.getWishListItems(wishListId);
+
+        // if successful, add to model
+        if(wishList != null && wishListItems != null){
+            model.addAttribute("wishList",wishList);
+            model.addAttribute("wishListItems", wishListItems);
+        }else {
+            model.addAttribute("queryFailure", true);
         }
 
         return "wish_list";
