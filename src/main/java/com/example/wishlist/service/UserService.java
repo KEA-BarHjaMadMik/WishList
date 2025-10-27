@@ -2,6 +2,7 @@ package com.example.wishlist.service;
 
 import com.example.wishlist.model.User;
 import com.example.wishlist.repository.UserRepository;
+import com.example.wishlist.utils.FormatUtil;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,9 +15,13 @@ public class UserService {
 
     public User authenticate(String uid, String pw) {
         // Try to retrieve the username by username or email
-        User user = repository.getUser(uid);
+        User user = repository.getUserByUsername(uid);
 
-        // Check if username exists and password matches
+        if (user == null && FormatUtil.isValidEmail(uid)) {
+            user = repository.getUserByEmail(uid);
+        }
+
+        // Check if user exists and password matches
         if (user != null && user.getPassword().equals(pw)) {
             // Authentication successful — return the full User object
             return user;

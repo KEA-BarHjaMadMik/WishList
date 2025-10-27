@@ -16,27 +16,6 @@ public class UserRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public User getUser(String uid) {
-        // Try finding by username
-        User user = getUserByUsername(uid);
-        if (user != null) {
-            return user;
-        }
-
-        // If not found, and uid looks like an email, try finding by email
-        if (isValidEmail(uid)) {
-            user = getUserByEmail(uid);
-        }
-
-        return user;
-    }
-
-    private boolean isValidEmail(String email) {
-        String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
-        return email != null && email.matches(emailRegex);
-    }
-
-
     public User getUserByUsername(String username) {
         String sql = "SELECT * FROM user_account WHERE username = ?";
 
@@ -46,7 +25,7 @@ public class UserRepository {
         return results.isEmpty() ? null : results.getFirst();
     }
 
-    private User getUserByEmail(String email) {
+    public User getUserByEmail(String email) {
         String sql = "SELECT * FROM user_account WHERE email = ?";
 
         RowMapper<User> rowMapper = getUserRowMapper();
