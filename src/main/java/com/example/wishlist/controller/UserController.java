@@ -2,7 +2,7 @@ package com.example.wishlist.controller;
 
 import com.example.wishlist.model.User;
 import com.example.wishlist.service.UserService;
-import com.example.wishlist.utils.SessionUtils;
+import com.example.wishlist.utils.SessionUtil;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -24,7 +24,7 @@ public class UserController {
     @GetMapping("/login")
     public String showLoginForm(HttpSession session) {
         // if already logged in, return to front page, else proceed to form
-        return SessionUtils.isLoggedIn(session) ? "index" : "login";
+        return SessionUtil.isLoggedIn(session) ? "index" : "login";
     }
 
     @PostMapping("/login")
@@ -59,7 +59,7 @@ public class UserController {
     @GetMapping("/register_user")
     public String showRegistrationForm(HttpSession session, Model model) {
         // if already logged in, return to front page, else proceed to form
-        if (SessionUtils.isLoggedIn(session)) {
+        if (SessionUtil.isLoggedIn(session)) {
             return "index";
         }
 
@@ -112,7 +112,7 @@ public class UserController {
     @GetMapping("/user_admin")
     public String showUserAdminPage(HttpSession session, Model model) {
         // Ensure user is logged in
-        if (!SessionUtils.isLoggedIn(session)) {
+        if (!SessionUtil.isLoggedIn(session)) {
             return "redirect:/login";
         }
 
@@ -134,7 +134,7 @@ public class UserController {
                              HttpSession session,
                              Model model) {
         // Ensure user is logged in
-        if (!SessionUtils.isLoggedIn(session)) {
+        if (!SessionUtil.isLoggedIn(session)) {
             return "redirect:/login";
         }
 
@@ -179,7 +179,7 @@ public class UserController {
     @GetMapping("/change_password")
     public String showChangePasswordForm(HttpSession session) {
         // Ensure user is logged in
-        if (!SessionUtils.isLoggedIn(session)) {
+        if (!SessionUtil.isLoggedIn(session)) {
             return "redirect:/login";
         }
 
