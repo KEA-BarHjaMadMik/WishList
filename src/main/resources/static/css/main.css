@@ -66,10 +66,6 @@ input[type="password"] {
     body {
         padding: 1rem;
     }
-
-    form {
-        padding: 1.5rem;
-    }
 }
 
 /* Buttons */
