@@ -27,5 +27,14 @@
 
 <h1>Sikkerhed</h1>
 <a th:href="@{/change_password}">Skift password</a>
+
+<h1>Administration</h1>
+<form th:action="@{/delete}" method="post">
+    <button type="submit" onclick="return confirm('Er du sikker på at du vil slette din bruger?')">
+        Slet min bruger
+    </button>
+</form>
+<div class="error" th:if="${deleteFailure}">Noget gik galt. Prøv igen.</div>
+
 </body>
 </html>

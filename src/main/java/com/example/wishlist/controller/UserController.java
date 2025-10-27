@@ -187,7 +187,7 @@ public class UserController {
     }
 
     @PostMapping("/change_password")
-    public String updateUser(@RequestParam("password") String password,
+    public String changePassword(@RequestParam("password") String password,
                              @RequestParam("newPassword") String newPassword,
                              @RequestParam("confirmNewPassword") String confirmNewPassword,
                              HttpSession session,
@@ -225,6 +225,21 @@ public class UserController {
         } else {
             model.addAttribute("updateFailure", true);
             return "change_password";
+        }
+    }
+
+    @PostMapping("/delete")
+    public String deleteUser(HttpSession session, Model model){
+        // Retrieve username from session
+        String username = (String) session.getAttribute("username");
+
+        // Proceed with deleting user
+        if(service.deleteUser(username)) {
+            session.invalidate();
+            return "redirect:/";
+        }else{
+            model.addAttribute("deleteFailure", true);
+            return "user_admin";
         }
     }
 }

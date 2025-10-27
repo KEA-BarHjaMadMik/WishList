@@ -118,4 +118,16 @@ public class UserRepository {
             return false;
         }
     }
+
+    public boolean deleteUser(String username) {
+        String sql = "DELETE FROM user_account WHERE username = ?";
+
+        try {
+            int rowsAffected = jdbcTemplate.update(sql, username);
+            return rowsAffected == 1;
+        } catch (DataAccessException e) {
+            System.err.println("Database error during user deletion: " + e.getMessage());
+            return false;
+        }
+    }
 }
