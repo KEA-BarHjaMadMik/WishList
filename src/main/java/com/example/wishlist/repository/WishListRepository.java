@@ -9,7 +9,10 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.Types;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -84,15 +87,45 @@ public class WishListRepository {
     }
 
     public int createWishListAndReturnId(WishList wishList) {
-        String sql = "INSERT INTO wish_list (title, description, eventdate, not_public) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO wish_list (username, title, description, eventdate, not_public) VALUES (?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update(connection -> {
-                    PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+        try {
+            jdbcTemplate.update(connection -> {
+                        PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
-                    // Required field
-                    ps.setString
-                }
-        );
+                        // Required fields
+                        ps.setString(1, wishList.getUsername());
+                        ps.setString(2, wishList.getTitle());
+
+                        // Optional fields
+                        String description = wishList.getDescription();
+                        if (description != null) {
+                            ps.setString(3, description);
+                        } else {
+                            ps.setNull(3, Types.VARCHAR);
+                        }
+
+                        LocalDate eventdate = wishList.getEventDate();
+                        if (eventdate != null) {
+                            ps.setDate(4, Date.valueOf(eventdate));
+                        } else {
+                            ps.setNull(4, Types.DATE);
+                        }
+
+                        ps.setBoolean(5, wishList.isNotPublic());
+
+                        return ps;
+                    },
+                    keyHolder
+            );
+
+            Number wishListId = keyHolder.getKey();
+            return (wishListId != null) ? wishListId.intValue() : -1;
+
+        }catch (DataAccessException e) {
+            System.err.println("Database error during wish list creation: " + e.getMessage());
+            return -1;
+        }
     }
 }

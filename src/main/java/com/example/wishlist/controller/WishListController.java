@@ -77,7 +77,7 @@ public class WishListController {
     }
 
     @PostMapping("/create_wish_list")
-    public String createWishList(@Valid @ModelAttribute WishList wishList,
+    public String createWishList(@ModelAttribute WishList wishList,
                                  BindingResult bindingResult,
                                  Model model) {
 
@@ -91,7 +91,7 @@ public class WishListController {
 
         // Proceed with registration
         int wishListId  = service.createWishListAndReturnId(wishList);
-        if (wishListId > 0) {
+        if (wishListId != -1) {
             return "redirect:/wish_list/" + wishListId;
         } else {
             model.addAttribute("registrationFailure", true);
