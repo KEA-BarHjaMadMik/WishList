@@ -16,7 +16,7 @@ CREATE TABLE wish_list (
                            title VARCHAR(100) NOT NULL,
                            description VARCHAR(800) NULL,
                            eventdate DATE NULL,
-                           private BOOLEAN NOT NULL DEFAULT 0,
+                           not_public BOOLEAN NOT NULL DEFAULT 0,
                            PRIMARY KEY (id),
                            CONSTRAINT fk_wish_list_user_account FOREIGN KEY (username)
                                REFERENCES user_account(username)

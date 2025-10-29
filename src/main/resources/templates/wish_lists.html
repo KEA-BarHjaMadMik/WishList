@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Wish Lists</title>
+    <link th:href="@{/css/main.css}" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}">...</div>
+<main>
+  <div class="content_wrapper">
+    <h1>Dine ønskelister</h1>
+    <p th:if="${userWishLists.isEmpty()}">Ingen ønskelister, vil du lave en ny?</p>
+    <div th:unless="${userWishLists.isEmpty()}">
+      <table>
+        <thead>
+        <tr>
+          <th>Titel</th>
+          <th>Beskrivelse</th>
+          <th>Dato for begivenhed</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="wishList: ${userWishLists}">
+          <td><a th:href="@{wish_list/{wishListId}(wishListId=${wishList.id})}" th:text="${wishList.title}"></a></td>
+          <td th:if="${wishList.description != null}" th:text="${wishList.description}"></td>
+          <td th:if="${wishList.eventDate != null}" th:text="${wishList.eventDate}"></td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="error" th:if="${queryFailure}">Noget gik galt. Prøv igen.</div>
+    </div>
+  </div>
+</main>
+</body>
+</html>
