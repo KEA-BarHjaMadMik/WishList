@@ -17,7 +17,7 @@
             <div class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
 
             <label for="description">Beskrivelse:</label>
-            <input id="description" type="text" th:field="*{description}"/>
+            <textarea id="description" th:field="*{description}" th:rows="5" th:cols="40" required></textarea>
             <div class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{description}"></div>
 
             <label for="eventdate">Begivenhedsdato</label>
