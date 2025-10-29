@@ -1,12 +1,21 @@
 package com.example.wishlist.model;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDate;
 
 public class WishList {
     private int id;
     private String username;
+
+    @NotBlank(message = "Titel må ikke være tom.")
+    @Size(max = 100, message = "Titel kan højest være 100 tegn.")
     private String title;
+
+    @Size(max = 800, message = "Beskrivelse kan højest være 800 tegn.")
     private String description;
+
     private LocalDate eventDate;
     private boolean notPublic;
 

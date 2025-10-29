@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Opret ønskeseddel</title>
+    <link th:href="@{/css/main.css}" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}">...</div>
+
+<main>
+    <div class="content_wrapper">
+        <h1>Opret ønskeseddel</h1>
+        <form method="post" th:action="@{/create_wish_list}" th:object="${wishList}">
+            <label for="title">Titel:</label>
+            <input id="title" type="text" th:field="*{title}" required/>
+            <div class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+
+            <label for="description">Beskrivelse:</label>
+            <textarea id="description" th:field="*{description}" th:rows="5" th:cols="40" required></textarea>
+            <div class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{description}"></div>
+
+            <label for="eventdate">Begivenhedsdato</label>
+            <input id="eventdate" type="date" th:field="*{eventDate}"/>
+
+            <label for="visibility">Synlighed:</label>
+            <select id="visibility" th:field="*{notPublic}">
+                <option th:value="false">Offentlig</option>
+                <option th:value="true">Privat</option>
+            </select>
+
+            <button type="submit">Opret</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>

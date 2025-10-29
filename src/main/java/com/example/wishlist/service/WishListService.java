@@ -11,7 +11,7 @@ import java.util.List;
 public class WishListService {
     private final WishListRepository repository;
 
-    public WishListService(WishListRepository repository){
+    public WishListService(WishListRepository repository) {
         this.repository = repository;
     }
 
@@ -23,7 +23,11 @@ public class WishListService {
         return repository.getWishList(wishListId);
     }
 
-    public List<WishItem> getWishListItems(String wishListId){
+    public List<WishItem> getWishListItems(String wishListId) {
         return repository.getWishListItems(wishListId);
+    }
+
+    public int createWishListAndReturnId(WishList wishList) {
+        return repository.createWishListAndReturnId(wishList);
     }
 }
