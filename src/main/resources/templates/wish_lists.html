@@ -22,9 +22,9 @@
         </thead>
         <tbody>
         <tr th:each="wishList: ${userWishLists}">
-          <td th:text="${wishList.getTitle()}">Titel</td>
-          <td th:text="${wishList.getDescription()}">Beskrivelse</td>
-          <td th:text="${wishList.getEventDate().toString()}">Dato for begivenhed</td>
+          <td><a th:href="@{wish_list/{wishListId}(wishListId=${wishList.id})}" th:text="${wishList.title}"></a></td>
+          <td th:if="${wishList.description != null}" th:text="${wishList.description}"></td>
+          <td th:if="${wishList.eventDate != null}" th:text="${wishList.eventDate}"></td>
         </tr>
         </tbody>
       </table>

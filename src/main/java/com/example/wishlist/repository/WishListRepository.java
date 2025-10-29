@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.sql.Date;
 
 @Repository
 public class WishListRepository {
@@ -36,7 +37,7 @@ public class WishListRepository {
                 rs.getString("username"),
                 rs.getString("title"),
                 rs.getString("description"),
-                rs.getDate("eventdate").toLocalDate(),
+                rs.getDate("eventdate") != null ? rs.getDate("eventdate").toLocalDate() : null,
                 rs.getBoolean("not_public")));
     }
 
