@@ -14,7 +14,6 @@ import java.sql.PreparedStatement;
 import java.sql.Types;
 import java.time.LocalDate;
 import java.util.List;
-import java.sql.Date;
 
 @Repository
 public class WishListRepository {
@@ -48,7 +47,7 @@ public class WishListRepository {
     }
 
     public WishList getWishList(String wishListId) {
-        String sql = "SELECT id, title, description, eventdate, not_public FROM wish_list WHERE id = ?";
+        String sql = "SELECT id, username, title, description, eventdate, not_public FROM wish_list WHERE id = ?";
 
         RowMapper<WishList> rowMapper = getWishListRowMapper();
 

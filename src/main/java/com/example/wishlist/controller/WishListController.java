@@ -77,9 +77,19 @@ public class WishListController {
     }
 
     @PostMapping("/create_wish_list")
-    public String createWishList(@ModelAttribute WishList wishList,
+    public String createWishList(HttpSession session,
+                                 @Valid @ModelAttribute WishList wishList,
                                  BindingResult bindingResult,
                                  Model model) {
+
+        // Ensure user is logged in
+        if (!SessionUtil.isLoggedIn(session)) {
+            return "redirect:/login";
+        }
+
+        // Set wish list username to current user
+        String username = (String) session.getAttribute("username");
+        wishList.setUsername(username);
 
         // Check for field validation errors
         boolean fieldsHaveErrors = bindingResult.hasErrors();
