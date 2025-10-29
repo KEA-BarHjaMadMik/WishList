@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wish Lists</title>
+    <link th:href="@{/css/main.css}" rel="stylesheet">
+</head>
+<body>
+  <div th:replace="~{fragments/header :: header}">...</div>
+<main>
+  <div class="content_wrapper">
+    <h1>Dine ønskelister</h1>
+    <p th:if="${userWishLists.isEmpty()}">Ingen ønskelister, vil du lave en ny?</p>
+    <div th:unless="${userWishLists.isEmpty()}">
+      <table>
+        <thead>
+        <tr>
+          <th>Titel</th>
+          <th>Beskrivelse</th>
+          <th>Dato for begivenhed</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="wishList: ${userWishLists}">
+          <td th:text="${wishList.getTitle()}">Titel</td>
+          <td th:text="${wishList.getDescription()}">Beskrivelse</td>
+          <td th:text="${wishList.getEventDate().toString()}">Dato for begivenhed</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+</body>
+</html>
