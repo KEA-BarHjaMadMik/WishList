@@ -50,6 +50,8 @@ public class WishListController {
         WishList wishList = service.getWishList(wishListId);
         List<WishItem> wishListItems = service.getWishListItems(wishListId);
 
+
+
         // if successful, add to model
         if(wishList != null && wishListItems != null){
             model.addAttribute("wishList",wishList);
