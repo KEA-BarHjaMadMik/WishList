@@ -5,8 +5,11 @@ import com.example.wishlist.model.WishList;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.util.List;
 
 @Repository
@@ -59,8 +62,8 @@ public class WishListRepository {
         RowMapper<WishItem> rowMapper = getWishItemRowMapper();
 
         try {
-            return jdbcTemplate.query(sql, rowMapper,wishListId);
-        } catch (DataAccessException e){
+            return jdbcTemplate.query(sql, rowMapper, wishListId);
+        } catch (DataAccessException e) {
             System.err.println("Database error during wish list query: " + e.getMessage());
             return null;
         }
@@ -77,5 +80,18 @@ public class WishListRepository {
                 rs.getString("link"),
                 rs.getBoolean("reserved"),
                 rs.getString("reserved_by")));
+    }
+
+    public int createWishListAndReturnId(WishList wishList) {
+        String sql = "INSERT INTO wish_list (title, description, eventdate, not_public) VALUES (?, ?, ?, ?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+                    PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+
+                    // Required field
+                    ps.setString
+                }
+        );
     }
 }

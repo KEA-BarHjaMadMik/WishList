@@ -5,10 +5,14 @@ import com.example.wishlist.model.WishList;
 import com.example.wishlist.service.WishListService;
 import com.example.wishlist.utils.SessionUtil;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -21,7 +25,7 @@ public class WishListController {
     }
 
     @GetMapping("/wish_lists")
-    public String getUserWishLists(HttpSession session, Model model){
+    public String getUserWishLists(HttpSession session, Model model) {
         // Ensure user is logged in
         if (!SessionUtil.isLoggedIn(session)) {
             return "redirect:/login";
@@ -30,9 +34,9 @@ public class WishListController {
         String username = (String) session.getAttribute("username");
 
         List<WishList> userWishLists = service.getUserWishLists(username);
-        if(userWishLists != null) {
-            model.addAttribute("userWishLists",userWishLists);
-        }else {
+        if (userWishLists != null) {
+            model.addAttribute("userWishLists", userWishLists);
+        } else {
             model.addAttribute("queryFailure", true);
         }
 
@@ -51,13 +55,47 @@ public class WishListController {
         List<WishItem> wishListItems = service.getWishListItems(wishListId);
 
         // if successful, add to model
-        if(wishList != null && wishListItems != null){
-            model.addAttribute("wishList",wishList);
+        if (wishList != null && wishListItems != null) {
+            model.addAttribute("wishList", wishList);
             model.addAttribute("wishListItems", wishListItems);
-        }else {
+        } else {
             model.addAttribute("queryFailure", true);
         }
 
         return "wish_list";
+    }
+
+    @GetMapping("/create_wish_list")
+    public String showCreateWishListForm(HttpSession session, Model model) {
+        // Ensure user is logged in
+        if (!SessionUtil.isLoggedIn(session)) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("wishList", new WishList());
+        return "wish_list_registration_form";
+    }
+
+    @PostMapping("/create_wish_list")
+    public String createWishList(@Valid @ModelAttribute WishList wishList,
+                                 BindingResult bindingResult,
+                                 Model model) {
+
+        // Check for field validation errors
+        boolean fieldsHaveErrors = bindingResult.hasErrors();
+
+        // If validation failed, return to form
+        if (fieldsHaveErrors) {
+            return "wish_list_registration_form";
+        }
+
+        // Proceed with registration
+        int wishListId  = service.createWishListAndReturnId(wishList);
+        if (wishListId > 0) {
+            return "redirect:/wish_list/" + wishListId;
+        } else {
+            model.addAttribute("registrationFailure", true);
+            return "wish_list_registration_form";
+        }
     }
 }
