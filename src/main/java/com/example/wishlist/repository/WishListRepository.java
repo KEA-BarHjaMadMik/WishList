@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.Types;
 import java.time.LocalDate;
 import java.util.List;
+import java.sql.Date;
 
 @Repository
 public class WishListRepository {
@@ -42,7 +43,7 @@ public class WishListRepository {
                 rs.getString("username"),
                 rs.getString("title"),
                 rs.getString("description"),
-                rs.getDate("eventdate").toLocalDate(),
+                rs.getDate("eventdate") != null ? rs.getDate("eventdate").toLocalDate() : null,
                 rs.getBoolean("not_public")));
     }
 
