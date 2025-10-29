@@ -42,7 +42,7 @@ public class WishListRepository {
     }
 
     public WishList getWishList(String wishListId) {
-        String sql = "SELECT id, title, description, eventdate, not_public FROM wish_list WHERE id = ?";
+        String sql = "SELECT id, username, title, description, eventdate, not_public FROM wish_list WHERE id = ?";
 
         RowMapper<WishList> rowMapper = getWishListRowMapper();
 
