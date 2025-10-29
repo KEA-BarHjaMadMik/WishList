@@ -8,7 +8,11 @@
 <body>
 <div th:replace="~{fragments/header :: header}">...</div>
 <main>
-    <div class="content_wrapper">
+    <div class="content_wrapper" th:if="${!username.equals(wishList.username) && wishList.notPublic}">
+        <h1 class="error">Fejl</h1>
+        <p class="error">Du har ikke adgang til denne ønskeseddel</p>
+    </div>
+    <div class="content_wrapper" th:unless="${!username.equals(wishList.username) && wishList.notPublic}">
         <h1><span th:text="${wishList.title}"></span></h1>
         <table>
             <thead>
