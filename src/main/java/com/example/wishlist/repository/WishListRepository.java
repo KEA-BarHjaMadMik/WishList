@@ -18,7 +18,7 @@ public class WishListRepository {
     }
 
     public List<WishList> getUserWishLists(String username) {
-        String sql = "SELECT id, title, description, eventdate, not_public FROM wish_list WHERE username = ?";
+        String sql = "SELECT id, username, title, description, eventdate, not_public FROM wish_list WHERE username = ?";
 
         RowMapper<WishList> rowMapper = getWishListRowMapper();
 
@@ -33,6 +33,7 @@ public class WishListRepository {
     private RowMapper<WishList> getWishListRowMapper() {
         return ((rs, rowNum) -> new WishList(
                 rs.getInt("id"),
+                rs.getString("username"),
                 rs.getString("title"),
                 rs.getString("description"),
                 rs.getDate("eventdate").toLocalDate(),

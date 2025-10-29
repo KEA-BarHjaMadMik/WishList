@@ -1,10 +1,10 @@
 package com.example.wishlist.model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class WishList {
     private int id;
+    private String username;
     private String title;
     private String description;
     private LocalDate eventDate;
@@ -12,9 +12,10 @@ public class WishList {
 
     public WishList(){}
 
-    public WishList(int id, String title, String description,
+    public WishList(int id, String username, String title, String description,
                     LocalDate eventDate, boolean notPublic) {
         this.id = id;
+        this.username = username;
         this.title = title;
         this.description = description;
         this.eventDate = eventDate;
@@ -27,6 +28,14 @@ public class WishList {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getTitle() {
