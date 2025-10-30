@@ -118,8 +118,8 @@ public class WishListController {
         }
 
         if (wishList != null){
-            model.addAttribute("wish_item", wishItem);
-            model.addAttribute("wish_list", wishList);
+            model.addAttribute("wishItem", wishItem);
+            model.addAttribute("wishList", wishList);
         } else {
             model.addAttribute("queryFailure", true);
         }

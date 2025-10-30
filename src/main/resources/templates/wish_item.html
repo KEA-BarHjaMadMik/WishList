@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Wish item</title>
+    <link th:href="@{/css/main.css}" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}">...</div>
+<main>
+    <div class="content_wrapper">
+        <h1><span th:text="${wishItem.description}"></span></h1>
+        <p><span th:text="${wishItem.description}"></span></p>
+        <p><span th:text="${#numbers.formatDecimal(wishItem.price, 1, 2)}"></span></p>
+    </div>
+</main>
+
+</body>
+</html>
