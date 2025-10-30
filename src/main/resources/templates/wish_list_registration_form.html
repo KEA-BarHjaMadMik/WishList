@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Opret ønskeseddel - WishList</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎃</text></svg>">
+    <link rel="icon"
+          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎃</text></svg>">
     <link th:href="@{/css/main.css}" rel="stylesheet">
     <link th:href="@{/css/halloween.css}" rel="stylesheet">
 </head>
 <body>
-    <div th:replace="~{fragments/header :: header}">...</div>
-    <main>
-        <div class="content_wrapper form-page">
+<div th:replace="~{fragments/header :: header}">...</div>
+<main>
+    <div class="content_wrapper form-page">
         <div class="form-container">
             <div class="form-header">
                 <h1>Opret ny ønskeseddel</h1>
@@ -26,7 +27,8 @@
 
                 <div class="form-group">
                     <label for="description">Beskrivelse (valgfri)</label>
-                    <textarea id="description" th:field="*{description}" rows="5" placeholder="Beskriv din ønskeseddel..."></textarea>
+                    <textarea id="description" th:field="*{description}" rows="5"
+                              placeholder="Beskriv din ønskeseddel..."></textarea>
                     <div class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
                 </div>
 
@@ -49,8 +51,8 @@
                 </div>
             </form>
         </div>
-        </div>
-    </main>
-    <div th:replace="~{fragments/footer :: footer}">...</div>
+    </div>
+</main>
+<div th:replace="~{fragments/footer :: footer}">...</div>
 </body>
 </html>

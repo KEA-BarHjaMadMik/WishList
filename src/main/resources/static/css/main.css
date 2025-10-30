@@ -86,7 +86,7 @@ textarea {
 }
 
 /* Buttons */
-button, .button-link, .submit-button {
+button, .button-link, .submit-button, .button-secondary {
     display: inline-block;
     padding: 0.75rem 1.5rem;
     background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
@@ -575,6 +575,9 @@ main {
 .form-actions button, .form-actions a {
     flex: 1;
     text-align: center;
+    width: 100%;
+    padding: 1rem;
+    margin-top: 1rem;
 }
 
 .form-footer {
