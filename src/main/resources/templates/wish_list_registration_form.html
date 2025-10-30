@@ -17,10 +17,10 @@
             <div class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
 
             <label for="description">Beskrivelse:</label>
-            <textarea id="description" th:field="*{description}" th:rows="5" th:cols="40" required></textarea>
+            <textarea id="description" th:field="*{description}" th:rows="5" th:cols="40"></textarea>
             <div class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{description}"></div>
 
-            <label for="eventdate">Begivenhedsdato</label>
+            <label for="eventdate">Begivenhedsdato:</label>
             <input id="eventdate" type="date" th:field="*{eventDate}"/>
 
             <label for="visibility">Synlighed:</label>

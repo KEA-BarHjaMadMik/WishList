@@ -18,6 +18,9 @@
                 <a th:href="@{/}" class="nav-link">
                     <span class="nav-text">Forside</span>
                 </a>
+                <a th:if="${isLoggedIn}" th:href="@{/wish_lists}" class="nav-link">
+                    <span class="nav-text">Ønskesedler</span>
+                </a>
             </nav>
 
             <div th:unless="${isLoggedIn}">
