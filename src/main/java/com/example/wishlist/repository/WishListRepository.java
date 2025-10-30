@@ -61,7 +61,7 @@ public class WishListRepository {
     }
 
     public List<WishItem> getWishListItems(String wishListId) {
-        String sql = "SELECT id, title, favourite, description, price, quantity, link, reserved, reserved_by FROM wish_item WHERE wish_list_id = ?";
+        String sql = "SELECT id, wish_list_id, title, favourite, description, price, quantity, link, reserved, reserved_by FROM wish_item WHERE wish_list_id = ?";
 
         RowMapper<WishItem> rowMapper = getWishItemRowMapper();
 
@@ -76,6 +76,7 @@ public class WishListRepository {
     private RowMapper<WishItem> getWishItemRowMapper() {
         return ((rs, rowNum) -> new WishItem(
                 rs.getInt("id"),
+                rs.getInt("wish_list_id"),
                 rs.getString("title"),
                 rs.getBoolean("favourite"),
                 rs.getString("description"),
@@ -126,6 +127,20 @@ public class WishListRepository {
         }catch (DataAccessException e) {
             System.err.println("Database error during wish list creation: " + e.getMessage());
             return -1;
+        }
+    }
+
+    public WishItem getWishItem(String wishItemId){
+        String sql = "SELECT id, wish_list_id, title, favourite, description, price, quantity, link, reserved, reserved_by FROM wish_item WHERE id = ?";
+
+        RowMapper<WishItem> rowMapper = getWishItemRowMapper();
+
+        try {
+            List<WishItem> results = jdbcTemplate.query(sql, rowMapper, wishItemId);
+            return results.isEmpty() ? null : results.getFirst();
+        } catch (DataAccessException e) {
+            System.err.println("Database error during wish list query: " + e.getMessage());
+            return null;
         }
     }
 }
