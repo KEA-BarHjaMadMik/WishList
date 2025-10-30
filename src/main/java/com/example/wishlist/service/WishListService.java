@@ -30,4 +30,8 @@ public class WishListService {
     public int createWishListAndReturnId(WishList wishList) {
         return repository.createWishListAndReturnId(wishList);
     }
+
+    public boolean updateWishList(WishList wishList) {
+        return repository.updateWishList(wishList);
+    }
 }

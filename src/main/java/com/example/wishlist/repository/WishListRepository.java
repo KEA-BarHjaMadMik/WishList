@@ -128,4 +128,28 @@ public class WishListRepository {
             return -1;
         }
     }
+
+    public boolean updateWishList(WishList wishList) {
+        String sql = "UPDATE wish_list SET title = ?, description = ?, eventdate = ?, not_public = ? WHERE id = ?";
+
+        try {
+            // Check date for null value
+            LocalDate date = wishList.getEventDate();
+            Date sqlDate = date != null ? Date.valueOf(date) : null;
+
+            // proceed
+            int affectedRows = jdbcTemplate.update(
+                    sql,
+                    wishList.getTitle(),
+                    wishList.getDescription(),
+                    sqlDate,
+                    wishList.isNotPublic(),
+                    wishList.getId()
+            );
+            return affectedRows == 1;
+        } catch (DataAccessException e) {
+            System.err.println("Database error during wish list update: " + e.getMessage());
+            return false;
+        }
+    }
 }

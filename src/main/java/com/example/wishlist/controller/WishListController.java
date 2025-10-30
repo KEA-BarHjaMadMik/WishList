@@ -110,4 +110,63 @@ public class WishListController {
             return "wish_list_registration_form";
         }
     }
+
+    @GetMapping("/edit_wish_list/{wishListId}")
+    public String showEditWishListForm(@PathVariable String wishListId, HttpSession session, Model model) {
+        // Ensure user is logged in
+        if (!SessionUtil.isLoggedIn(session)) {
+            return "redirect:/login";
+        }
+
+        // Get wish list and items
+        WishList wishList = service.getWishList(wishListId);
+
+        // if successful
+        if (wishList != null) {
+            // If not current user's wish list, redirect to front page
+            String currentUser = (String) session.getAttribute("username");
+            if(!currentUser.equals(wishList.getUsername())){
+                return "redirect:/";
+            }
+            // else add to model
+            model.addAttribute("wishList", wishList);
+        } else {
+            model.addAttribute("queryFailure", true);
+        }
+
+        return "wish_list_edit_form";
+    }
+
+    @PostMapping("/edit_wish_list")
+    public String updateWishList(HttpSession session,
+                                 @Valid @ModelAttribute WishList wishList,
+                                 BindingResult bindingResult,
+                                 Model model) {
+        // Ensure user is logged in
+        if (!SessionUtil.isLoggedIn(session)) {
+            return "redirect:/login";
+        }
+
+        // If not current user's wish list, redirect to front page
+        String currentUser = (String) session.getAttribute("username");
+        if(!currentUser.equals(wishList.getUsername())){
+            return "redirect:/";
+        }
+
+        // Check for field validation errors
+        boolean fieldsHaveErrors = bindingResult.hasErrors();
+
+        // If validation failed, return to form
+        if (fieldsHaveErrors) {
+            return "wish_list_edit_form";
+        }
+
+        // Proceed with update
+        if (service.updateWishList(wishList)) {
+            return "redirect:/wish_list/" + wishList.getId();
+        } else {
+            model.addAttribute("updateFailure", true);
+            return "wish_list_edit_form";
+        }
+    }
 }
