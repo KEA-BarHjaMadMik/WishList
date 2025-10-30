@@ -2,16 +2,29 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Wish item</title>
+    <title>Ønske - Wish item</title>
     <link th:href="@{/css/main.css}" rel="stylesheet">
+    <link th:href="@{/css/halloween.css}" rel="stylesheet">
 </head>
 <body>
 <div th:replace="~{fragments/header :: header}">...</div>
 <main>
-    <div class="content_wrapper">
+    <div class="content_wrapper" th:if="${!username.equals(wishList.username) && wishList.notPublic}">
+        <div class="error-state">
+            <div class="error-state-icon">🔒</div>
+            <h1 class="error">Ingen adgang</h1>
+            <p class="error">Du har ikke tilladelse til at se dette ønske</p>
+            <a class="button-link" th:href="@{/}">← Tilbage til forsiden</a>
+        </div>
+    </div>
+    <div class="content_wrapper" th:unless="${!username.equals(wishList.username) && wishList.notPublic}">
         <h1><span th:text="${wishItem.description}"></span></h1>
         <p><span th:text="${wishItem.description}"></span></p>
-        <p><span th:text="${#numbers.formatDecimal(wishItem.price, 1, 2)}"></span></p>
+        <p><span th:text="${#numbers.formatDecimal(wishItem.price, 1, 2)}"></span></p> <!-- 1 is the minimum amount of integers, 2 is the amount of decimals -->
+        <p><span th:text="${#numbers.formatInteger(wishItem.quantity, 1)}"></span></p>
+        <p><span th:if="${wishItem.link != null}" th:text="${wishItem.link}"></span></p>
+        <p><span th:if="${wishItem.reserved}">Dette ønske er allerede reserveret af </span><span th:text="${wishItem.reservedBy}"></span></p>
+        <p><span th:unless="${wishItem.reserved}"></span></p>
     </div>
 </main>
 
