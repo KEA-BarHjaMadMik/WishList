@@ -25,6 +25,7 @@
         <p><span th:if="${wishItem.link != null}" th:text="${wishItem.link}"></span></p>
         <p><span th:if="${wishItem.reserved}">Dette ønske er allerede reserveret af </span><span th:text="${wishItem.reservedBy}"></span></p>
         <p><span th:unless="${wishItem.reserved}"></span></p>
+        <a class="button-secondary small" th:href="@{/wish_list/{wishListId}(wishListId=${wishList.id})}">Tilbage</a>
     </div>
 </main>
 
