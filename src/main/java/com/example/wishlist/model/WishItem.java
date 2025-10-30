@@ -2,6 +2,7 @@ package com.example.wishlist.model;
 
 public class WishItem {
     private int id;
+    private int wishListId;
     private String title;
     private boolean favourite;
     private String description;
@@ -13,8 +14,9 @@ public class WishItem {
 
     public WishItem(){}
 
-    public WishItem(int id, String title, boolean favourite, String description, double price, int quantity, String link, boolean reserved, String reservedBy) {
+    public WishItem(int id, int wishListId, String title, boolean favourite, String description, double price, int quantity, String link, boolean reserved, String reservedBy) {
         this.id = id;
+        this.wishListId = wishListId;
         this.title = title;
         this.favourite = favourite;
         this.description = description;
@@ -31,6 +33,14 @@ public class WishItem {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getWishListId(){
+        return wishListId;
+    }
+
+    public void setWishListId(int wishListId){
+        this.wishListId = wishListId;
     }
 
     public String getTitle() {

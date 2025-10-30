@@ -44,17 +44,10 @@ public class WishListController {
     }
 
     @GetMapping("/wish_list/{wishListId}")
-    public String getWishList(@PathVariable String wishListId, HttpSession session, Model model) {
-        // Ensure user is logged in
-        if (!SessionUtil.isLoggedIn(session)) {
-            return "redirect:/login";
-        }
-
+    public String getWishList(@PathVariable String wishListId, Model model) {
         // Get wish list and items
         WishList wishList = service.getWishList(wishListId);
         List<WishItem> wishListItems = service.getWishListItems(wishListId);
-
-
 
         // if successful, add to model
         if (wishList != null && wishListItems != null) {
@@ -111,62 +104,26 @@ public class WishListController {
         }
     }
 
-    @GetMapping("/edit_wish_list/{wishListId}")
-    public String showEditWishListForm(@PathVariable String wishListId, HttpSession session, Model model) {
-        // Ensure user is logged in
-        if (!SessionUtil.isLoggedIn(session)) {
-            return "redirect:/login";
+    @GetMapping("/wish_item/{wishItemId}")
+    public String getWishItem(@PathVariable String wishItemId, Model model){
+        WishItem wishItem = service.getWishItem(wishItemId);
+        WishList wishList;
+
+        //checks if there is an item or not
+        if (wishItem != null) {
+            wishList = service.getWishList(String.valueOf(wishItem.getWishListId()));
+        } else {
+            model.addAttribute("queryFailure", true);
+            return "wish_item";
         }
 
-        // Get wish list and items
-        WishList wishList = service.getWishList(wishListId);
-
-        // if successful
-        if (wishList != null) {
-            // If not current user's wish list, redirect to front page
-            String currentUser = (String) session.getAttribute("username");
-            if(!currentUser.equals(wishList.getUsername())){
-                return "redirect:/";
-            }
-            // else add to model
+        if (wishList != null){
+            model.addAttribute("wishItem", wishItem);
             model.addAttribute("wishList", wishList);
         } else {
             model.addAttribute("queryFailure", true);
         }
 
-        return "wish_list_edit_form";
-    }
-
-    @PostMapping("/edit_wish_list")
-    public String updateWishList(HttpSession session,
-                                 @Valid @ModelAttribute WishList wishList,
-                                 BindingResult bindingResult,
-                                 Model model) {
-        // Ensure user is logged in
-        if (!SessionUtil.isLoggedIn(session)) {
-            return "redirect:/login";
-        }
-
-        // If not current user's wish list, redirect to front page
-        String currentUser = (String) session.getAttribute("username");
-        if(!currentUser.equals(wishList.getUsername())){
-            return "redirect:/";
-        }
-
-        // Check for field validation errors
-        boolean fieldsHaveErrors = bindingResult.hasErrors();
-
-        // If validation failed, return to form
-        if (fieldsHaveErrors) {
-            return "wish_list_edit_form";
-        }
-
-        // Proceed with update
-        if (service.updateWishList(wishList)) {
-            return "redirect:/wish_list/" + wishList.getId();
-        } else {
-            model.addAttribute("updateFailure", true);
-            return "wish_list_edit_form";
-        }
+        return "wish_item";
     }
 }

@@ -31,6 +31,10 @@ public class WishListService {
         return repository.createWishListAndReturnId(wishList);
     }
 
+    public WishItem getWishItem(String wishItemId){
+        return repository.getWishItem(wishItemId);
+    }
+
     public boolean updateWishList(WishList wishList) {
         return repository.updateWishList(wishList);
     }
