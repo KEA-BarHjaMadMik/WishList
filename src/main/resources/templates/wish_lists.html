@@ -2,37 +2,55 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Wish Lists</title>
+    <title>Ønskesedler - WishList</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎃</text></svg>">
     <link th:href="@{/css/main.css}" rel="stylesheet">
+    <link th:href="@{/css/halloween.css}" rel="stylesheet">
 </head>
 <body>
-<div th:replace="~{fragments/header :: header}">...</div>
-<main>
-    <div class="content_wrapper">
-        <h1>Dine ønskesedler</h1>
-        <p th:if="${userWishLists.isEmpty()}">Ingen ønskelister, vil du lave en ny?</p>
-        <div th:unless="${userWishLists.isEmpty()}">
-            <table>
-                <thead>
-                <tr>
-                    <th>Titel</th>
-                    <th>Beskrivelse</th>
-                    <th>Dato for begivenhed</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="wishList: ${userWishLists}">
-                    <td><a th:href="@{wish_list/{wishListId}(wishListId=${wishList.id})}"
-                           th:text="${wishList.title}"></a></td>
-                    <td th:if="${wishList.description != null}" th:text="${wishList.description}"></td>
-                    <td th:if="${wishList.eventDate != null}" th:text="${wishList.eventDate}"></td>
-                </tr>
-                </tbody>
-            </table>
-            <div class="error" th:if="${queryFailure}">Noget gik galt. Prøv igen.</div>
-            <a class="button-link" th:href="@{/create_wish_list}">Opret ønskeseddel</a>
+    <div th:replace="~{fragments/header :: header}">...</div>
+    <main>
+        <div class="content_wrapper">
+        <div class="page-header">
+            <h1>Dine ønskesedler</h1>
+            <a class="button-link" th:href="@{/create_wish_list}">+ Opret ny ønskeseddel</a>
         </div>
-    </div>
-</main>
+
+        <div class="error" th:if="${queryFailure}">Noget gik galt. Prøv igen.</div>
+
+        <!-- Empty State -->
+        <div class="empty-state" th:if="${userWishLists.isEmpty()}">
+            <div class="empty-state-icon">🎁</div>
+            <h2>Ingen ønskesedler endnu</h2>
+            <p>Kom i gang med at oprette din første ønskeseddel!</p>
+            <a class="button-link" th:href="@{/create_wish_list}">Opret din første ønskeseddel</a>
+        </div>
+
+        <!-- Wish Lists Grid -->
+        <div class="wishlist-grid" th:unless="${userWishLists.isEmpty()}">
+            <div class="wishlist-card" th:each="wishList: ${userWishLists}">
+                <div class="wishlist-card-header">
+                    <h3 th:text="${wishList.title}">Wish List Title</h3>
+                    <span class="visibility-badge" th:if="${wishList.notPublic}">🔒 Privat</span>
+                    <span class="visibility-badge public" th:unless="${wishList.notPublic}">🌐 Offentlig</span>
+                </div>
+                <div class="wishlist-card-body">
+                    <p class="wishlist-description" th:if="${wishList.description != null}" th:text="${wishList.description}">Description</p>
+                    <p class="wishlist-description empty" th:unless="${wishList.description != null}">Ingen beskrivelse</p>
+
+                    <div class="wishlist-meta">
+                        <span class="meta-item" th:if="${wishList.eventDate != null}">
+                            📅 <span th:text="${wishList.eventDate}">Date</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="wishlist-card-footer">
+                    <a class="card-button" th:href="@{wish_list/{wishListId}(wishListId=${wishList.id})}">Se ønskeseddel →</a>
+                </div>
+            </div>
+        </div>
+        </div>
+    </main>
+    <div th:replace="~{fragments/footer :: footer}">...</div>
 </body>
 </html>
