@@ -14,13 +14,14 @@
     </div>
     <div class="content_wrapper" th:unless="${!username.equals(wishList.username) && wishList.notPublic}">
         <h1><span th:text="${wishList.title}"></span></h1>
+        <p><span th:text="${wishList.description}"></span></p>
         <table>
             <thead>
-              <tr>
-                  <th>Ønske</th>
-                  <th>Antal</th>
-                  <th>Favorit</th>
-              </tr>
+                <tr>
+                    <th>Ønske</th>
+                    <th>Antal</th>
+                    <th>Favorit</th>
+                </tr>
             </thead>
             <tbody>
             <tr th:each="wishListItem: ${wishListItems}">
