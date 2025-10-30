@@ -2,39 +2,59 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Registrer bruger</title>
+    <title>Opret konto - WishList</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎃</text></svg>">
     <link th:href="@{/css/main.css}" rel="stylesheet">
+    <link th:href="@{/css/halloween.css}" rel="stylesheet">
 </head>
 <body>
+    <div th:replace="~{fragments/header :: header}">...</div>
+    <main>
+        <div class="content_wrapper form-page">
+        <div class="form-container">
+            <div class="form-header">
+                <h1>Opret din konto</h1>
+                <p>Kom i gang med at oprette dine ønskesedler i dag</p>
+            </div>
 
-<div th:replace="~{fragments/header :: header}">...</div>
+            <form class="modern-form" method="post" th:action="@{/register_user}" th:object="${newUser}">
+                <div class="error" th:if="${registrationFailure}">🚫 Noget gik galt. Prøv igen.</div>
 
-<main>
-    <div class="content_wrapper">
-        <h1>Registrer bruger</h1>
-        <form method="post" th:action="@{/register_user}" th:object="${newUser}">
-            <label for="username">Brugernavn:</label>
-            <input id="username" type="text" th:field="*{username}" required/>
-            <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
-            <div class="error" th:if="${usernameTaken}">Brugernavn er allerede i brug.</div>
+                <div class="form-group">
+                    <label for="username">Brugernavn</label>
+                    <input id="username" type="text" th:field="*{username}" placeholder="Vælg et brugernavn" required/>
+                    <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+                    <div class="error" th:if="${usernameTaken}">🚫 Brugernavn er allerede i brug.</div>
+                </div>
 
-            <label for="pw">Password:</label>
-            <input id="pw" type="password" th:field="*{password}" required/>
-            <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input id="email" type="email" th:field="*{email}" placeholder="din@email.dk" required/>
+                    <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                    <div class="error" th:if="${emailTaken}">🚫 E-mail er allerede i brug.</div>
+                </div>
 
-            <label for="confirmPw">Gentag password:</label>
-            <input id="confirmPw" type="password" name="confirmPassword" required/>
-            <div class="error" th:if="${passwordMismatch}">Passwords matcher ikke.</div>
+                <div class="form-group">
+                    <label for="pw">Password</label>
+                    <input id="pw" type="password" th:field="*{password}" placeholder="Vælg et sikkert password" required/>
+                    <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                </div>
 
-            <label for="email">E-mail:</label>
-            <input id="email" type="email" th:field="*{email}" required/>
-            <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
-            <div class="error" th:if="${emailTaken}">E-mail er allerede i brug.</div>
+                <div class="form-group">
+                    <label for="confirmPw">Gentag password</label>
+                    <input id="confirmPw" type="password" name="confirmPassword" placeholder="Gentag dit password" required/>
+                    <div class="error" th:if="${passwordMismatch}">🚫 Passwords matcher ikke.</div>
+                </div>
 
-            <button type="submit">Opret</button>
-        </form>
-        <div class="error" th:if="${registrationFailure}">Noget gik galt. Prøv igen.</div>
-    </div>
-</main>
+                <button type="submit" class="submit-button">Opret konto</button>
+            </form>
+
+            <div class="form-footer">
+                <p>Har du allerede en konto? <a th:href="@{/login}">Log ind her</a></p>
+            </div>
+        </div>
+        </div>
+    </main>
+    <div th:replace="~{fragments/footer :: footer}">...</div>
 </body>
 </html>
