@@ -3,36 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>Ønskeseddel - WishList</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎃</text></svg>">
+    <link rel="icon"
+          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎃</text></svg>">
     <link th:href="@{/css/main.css}" rel="stylesheet">
     <link th:href="@{/css/halloween.css}" rel="stylesheet">
 </head>
 <body>
-    <div th:replace="~{fragments/header :: header}">...</div>
-    <main>
-        <!-- Access Denied -->
-        <div class="content_wrapper" th:if="${!username.equals(wishList.username) && wishList.notPublic}">
-            <div class="error-state">
-                <div class="error-state-icon">🔒</div>
-                <h1 class="error">Ingen adgang</h1>
-                <p class="error">Du har ikke tilladelse til at se denne ønskeseddel</p>
-                <a class="button-link" th:href="@{/wish_lists}">← Tilbage til dine ønskesedler</a>
-            </div>
+<div th:replace="~{fragments/header :: header}">...</div>
+<main>
+    <!-- Access Denied -->
+    <div class="content_wrapper" th:if="${!username.equals(wishList.username) && wishList.notPublic}">
+        <div class="error-state">
+            <div class="error-state-icon">🔒</div>
+            <h1 class="error">Ingen adgang</h1>
+            <p class="error">Du har ikke tilladelse til at se denne ønskeseddel</p>
+            <a class="button-link" th:href="@{/wish_lists}">← Tilbage til dine ønskesedler</a>
         </div>
+    </div>
 
-        <!-- Wish List Content -->
-        <div class="content_wrapper" th:unless="${!username.equals(wishList.username) && wishList.notPublic}">
+    <!-- Wish List Content -->
+    <div class="content_wrapper" th:unless="${!username.equals(wishList.username) && wishList.notPublic}">
         <div class="page-header">
             <div>
                 <h1 th:text="${wishList.title}">Wish List Title</h1>
-                <p class="wishlist-subtitle" th:if="${wishList.description}" th:text="${wishList.description}">Description</p>
+                <p class="wishlist-subtitle" th:if="${wishList.description}" th:text="${wishList.description}">
+                    Description</p>
                 <div class="wishlist-info">
-                    <span class="info-badge" th:if="${wishList.eventDate}">📅 <span th:text="${wishList.eventDate}"></span></span>
+                    <span class="info-badge" th:if="${wishList.eventDate}">📅 <span
+                            th:text="${wishList.eventDate}"></span></span>
                     <span class="info-badge" th:if="${wishList.notPublic}">🔒 Privat</span>
                     <span class="info-badge" th:unless="${wishList.notPublic}">🌐 Offentlig</span>
                 </div>
             </div>
-            <a class="button-link" th:href="@{/wish_lists}">← Tilbage</a>
+            <div>
+                <a class="button-link" th:href="@{/wish_lists}">← Tilbage</a>
+                <a class="button-link" th:href="@{/edit_wish_list/{wishListId}(wishListId = ${wishList.id})}">🔧 Rediger</a>
+            </div>
         </div>
 
         <div class="error" th:if="${queryFailure}">Noget gik galt. Prøv igen.</div>
@@ -60,9 +66,10 @@
                     </div>
                 </div>
                 <div class="wish-item-footer">
-                    <button class="button-secondary small">Rediger</button>
-                    <button class="button-secondary small danger">Slet</button>
-                    <a class="button-secondary small" th:href="@{/wish_item/{wishItemId}(wishItemId=${wishListItem.id})}">Se ønske</a>
+                    <a class="button-secondary small"
+                       th:href="@{/wish_item/{wishItemId}(wishItemId=${wishListItem.id})}">Se ønske</a>
+                    <a class="button-secondary small">Rediger</a>
+                    <a class="button-secondary small danger">Slet</a>
                 </div>
             </div>
         </div>
@@ -71,8 +78,8 @@
         <div class="action-bar" th:unless="${wishListItems.isEmpty()}">
             <a class="button-link" href="#">+ Tilføj ønske</a>
         </div>
-        </div>
-    </main>
-    <div th:replace="~{fragments/footer :: footer}">...</div>
+    </div>
+</main>
+<div th:replace="~{fragments/footer :: footer}">...</div>
 </body>
 </html>

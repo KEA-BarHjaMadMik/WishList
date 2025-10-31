@@ -167,4 +167,16 @@ public class WishListRepository {
             return null;
         }
     }
+
+    public boolean deleteWishList(String wishListId) {
+        String sql = "DELETE FROM wish_list WHERE id = ?";
+
+        try {
+            int affectedRows = jdbcTemplate.update(sql, wishListId);
+            return affectedRows == 1;
+        } catch (DataAccessException e) {
+            System.err.println("Database error during wish list deletion");
+            return false;
+        }
+    }
 }

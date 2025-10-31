@@ -61,7 +61,7 @@ public class WishListController {
     }
 
     @GetMapping("/wish_item/{wishItemId}")
-    public String getWishItem(@PathVariable String wishItemId, Model model){
+    public String getWishItem(@PathVariable String wishItemId, Model model) {
         WishItem wishItem = service.getWishItem(wishItemId);
         WishList wishList;
 
@@ -73,7 +73,7 @@ public class WishListController {
             return "wish_item";
         }
 
-        if (wishList != null){
+        if (wishList != null) {
             model.addAttribute("wishItem", wishItem);
             model.addAttribute("wishList", wishList);
         } else {
@@ -118,7 +118,7 @@ public class WishListController {
         }
 
         // Proceed with registration
-        int wishListId  = service.createWishListAndReturnId(wishList);
+        int wishListId = service.createWishListAndReturnId(wishList);
         if (wishListId != -1) {
             return "redirect:/wish_list/" + wishListId;
         } else {
@@ -141,7 +141,7 @@ public class WishListController {
         if (wishList != null) {
             // If not current user's wish list, redirect to front page
             String currentUser = (String) session.getAttribute("username");
-            if(!currentUser.equals(wishList.getUsername())){
+            if (!currentUser.equals(wishList.getUsername())) {
                 return "redirect:/";
             }
             // else add to model
@@ -165,7 +165,7 @@ public class WishListController {
 
         // If not current user's wish list, redirect to front page
         String currentUser = (String) session.getAttribute("username");
-        if(!currentUser.equals(wishList.getUsername())){
+        if (!currentUser.equals(wishList.getUsername())) {
             return "redirect:/";
         }
 
@@ -183,6 +183,28 @@ public class WishListController {
         } else {
             model.addAttribute("updateFailure", true);
             return "wish_list_edit_form";
+        }
+    }
+
+    @PostMapping("/delete_wish_list/{wishListId}")
+    public String deleteWishList(HttpSession session, @PathVariable String wishListId, Model model) {
+        // Ensure user is logged in
+        if (!SessionUtil.isLoggedIn(session)) {
+            return "redirect:/login";
+        }
+
+        // Ensure current user owns wishList
+        WishList wishList = service.getWishList(wishListId);
+        if (wishList.getUsername().equals(session.getAttribute("username"))) {
+            return "redirect:/";
+        }
+
+        // Proceed with deletion
+        if (service.deleteWishList(wishListId)){
+            return "redirect:/wish_lists";
+        } else {
+            model.addAttribute("deleteFailure", true);
+            return "wish_lists";
         }
     }
 }

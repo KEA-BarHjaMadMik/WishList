@@ -48,6 +48,12 @@
                 <div class="form-actions">
                     <button type="submit" class="submit-button">Opdater</button>
                     <a th:href="@{/wish_lists}" class="button-secondary">Annuller</a>
+                    <form th:action="@{/delete}" method="post">
+                        <button type="submit" class="button-danger" onclick="return confirm('Er du sikker på at du vil slette denne ønskeseddel permanent? Denne handling kan ikke fortrydes!')">
+                            Slet ønskeseddel
+                        </button>
+                    </form>
+                    <div class="error" th:if="${deleteFailure}">🚫 Noget gik galt. Prøv igen.</div>
                 </div>
             </form>
         </div>

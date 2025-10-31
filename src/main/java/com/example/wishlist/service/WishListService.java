@@ -38,4 +38,8 @@ public class WishListService {
     public boolean updateWishList(WishList wishList) {
         return repository.updateWishList(wishList);
     }
+
+    public boolean deleteWishList(String wishListId) {
+        return repository.deleteWishList(wishListId);
+    }
 }
