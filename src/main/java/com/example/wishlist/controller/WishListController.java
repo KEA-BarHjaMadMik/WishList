@@ -282,7 +282,7 @@ public class WishListController {
         int wishListId = wishItem.getWishListId();
         WishList wishList = service.getWishList(String.valueOf(wishListId));
 
-        if (session.getAttribute("username").equals(wishList.getUsername())) {
+        if (!session.getAttribute("username").equals(wishList.getUsername())) {
             return "redirect:/";
         }
 
