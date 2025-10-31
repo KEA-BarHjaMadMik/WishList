@@ -42,4 +42,8 @@ public class WishListService {
     public boolean deleteWishList(String wishListId) {
         return repository.deleteWishList(wishListId);
     }
+
+    public boolean deleteWishItem(String wishItemId) {
+        return repository.deleteWishItem(wishItemId);
+    }
 }

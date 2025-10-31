@@ -179,4 +179,16 @@ public class WishListRepository {
             return false;
         }
     }
+
+    public boolean deleteWishItem(String wishItemId){
+        String sql = "DELETE FROM wish_item WHERE id = ?";
+
+        try{
+            int affectedRows = jdbcTemplate.update(sql, wishItemId);
+            return affectedRows == 1;
+        } catch (DataAccessException e) {
+            System.err.println("Database error during wish item deletion");
+            return false;
+        }
+    }
 }
