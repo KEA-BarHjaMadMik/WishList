@@ -191,4 +191,25 @@ public class WishListRepository {
             return false;
         }
     }
+
+    public boolean addWishItem(WishItem wishItem) {
+        String sql = "INSERT INTO wish_item (wish_list_id, title, favourite, description, price, quantity, link, reserved, reserved_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try {
+            int affectedRows = jdbcTemplate.update(sql,
+                    wishItem.getWishListId(),
+                    wishItem.getTitle(),
+                    wishItem.isFavourite(),
+                    wishItem.getDescription(),
+                    wishItem.getPrice(),
+                    wishItem.getQuantity(),
+                    wishItem.getLink(),
+                    wishItem.isReserved(),
+                    wishItem.getReservedBy()
+            );
+            return affectedRows == 1;
+        } catch (DataAccessException e) {
+            System.err.println("Database error during wish item insertion: " + e.getMessage());
+            return false;
+        }
+    }
 }

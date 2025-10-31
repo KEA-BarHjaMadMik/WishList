@@ -153,6 +153,69 @@ public class WishListController {
         return "wish_list_edit_form";
     }
 
+    @GetMapping("/wish_list/{wishListId}/add_wish_item")
+    public String showAddWishListForm(@PathVariable String wishListId, HttpSession session, Model model) {
+        // Ensure user is logged in
+        if (!SessionUtil.isLoggedIn(session)) {
+            return "redirect:/login";
+        }
+
+        // Get wish list and items
+        WishList wishList = service.getWishList(wishListId);
+
+        //Ensure user owns the list
+        String currentUser = (String) session.getAttribute("username");
+        // if successful
+        if (wishList == null || !currentUser.equals(wishList.getUsername())) {
+            return "redirect:/";
+        }
+        // Add a blank WishItem to the model
+        WishItem wishItem = new WishItem();
+        wishItem.setWishListId(Integer.parseInt(wishListId));
+        model.addAttribute("wishItem", wishItem);
+        model.addAttribute("wishList", wishList);
+
+        return "wish_item_add_form";
+    }
+
+    @PostMapping("/wish_list/{wishListId}/add_wish_item")
+    public String addWishItem(@PathVariable String wishListId,
+                              HttpSession session,
+                              @Valid @ModelAttribute WishItem wishItem,
+                              BindingResult bindingResult,
+                              Model model){
+
+        // Ensure user is logged in
+        if (!SessionUtil.isLoggedIn(session)) {
+            return "redirect:/login";
+        }
+        // Get wish list and items
+        WishList wishList = service.getWishList(wishListId);
+
+        //Ensure user owns the list
+        String currentUser = (String) session.getAttribute("username");
+        // if successful
+        if (wishList == null || !currentUser.equals(wishList.getUsername())) {
+            return "redirect:/";
+        }
+        // If validation failed, return to form
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("wishList", wishList);
+            return "wish_item_add_form";
+        }
+
+        boolean success = service.addWishItem(wishItem);
+
+        if(success) {
+            return "redirect:/wish_list/" + wishListId;
+        }
+        else {
+            model.addAttribute("Save Failure", true);
+            model.addAttribute("wishList", wishList);
+            return "wish_item_add_form";
+        }
+    }
+
     @PostMapping("/edit_wish_list")
     public String updateWishList(HttpSession session,
                                  @Valid @ModelAttribute WishList wishList,
@@ -230,4 +293,5 @@ public class WishListController {
             return "wish_list";
         }
     }
+
 }

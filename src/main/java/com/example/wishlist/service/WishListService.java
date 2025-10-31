@@ -46,4 +46,7 @@ public class WishListService {
     public boolean deleteWishItem(String wishItemId) {
         return repository.deleteWishItem(wishItemId);
     }
+
+    public boolean addWishItem(WishItem wishItem) { return repository.addWishItem(wishItem); }
+
 }
