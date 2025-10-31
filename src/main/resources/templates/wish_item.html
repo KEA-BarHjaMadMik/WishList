@@ -9,7 +9,7 @@
 <body>
 <div th:replace="~{fragments/header :: header}">...</div>
 <main>
-    <div class="content_wrapper" th:if="${!isLoggedIn && wishList.notPublic || !username.equals(wishList.username) && wishList.notPublic}">
+    <div class="content_wrapper" th:if="${wishList.notPublic and (!isLoggedIn or !username.equals(wishList.username))}">
         <div class="error-state">
             <div class="error-state-icon">🔒</div>
             <h1 class="error">Ingen adgang</h1>
@@ -17,7 +17,8 @@
             <a class="button-link" th:href="@{/}">← Tilbage til forsiden</a>
         </div>
     </div>
-    <div class="content_wrapper" th:unless="${!isLoggedIn && wishList.notPublic || !username.equals(wishList.username) && wishList.notPublic}">
+    <div class="content_wrapper"
+         th:unless="${wishList.notPublic and (!isLoggedIn or !username.equals(wishList.username))}">
         <div class="page-header">
             <div>
                 <h1 th:text="${wishItem.title}">Wish Item Title</h1>
@@ -52,7 +53,8 @@
 
         <!-- Action Buttons -->
         <div class="action-bar">
-            <a class="button-link" th:if="${wishItem.link != null}" th:href="${wishItem.link}" target="_blank">Gå til butik ↗️</a>
+            <a class="button-link" th:if="${wishItem.link != null}" th:href="${wishItem.link}" target="_blank">Gå til
+                butik ↗️</a>
         </div>
     </div>
 </main>
