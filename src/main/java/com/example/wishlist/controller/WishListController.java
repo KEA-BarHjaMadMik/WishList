@@ -207,4 +207,27 @@ public class WishListController {
             return "wish_lists";
         }
     }
+
+    @PostMapping("/delete_wish_item/{wishItemId}")
+    public String deleteWishItem(HttpSession session, @PathVariable String wishItemId, Model model){
+        // Ensure user is logged in
+        if (!SessionUtil.isLoggedIn(session)) {
+            return "redirect:/login";
+        }
+
+        WishItem wishItem = service.getWishItem(wishItemId);
+        int wishListId = wishItem.getWishListId();
+        WishList wishList = service.getWishList(String.valueOf(wishListId));
+
+        if (session.getAttribute("username").equals(wishList.getUsername())) {
+            return "redirect:/";
+        }
+
+        if (service.deleteWishItem(wishItemId)) {
+            return "redirect:/wish_list/" + wishListId;
+        } else {
+            model.addAttribute("deleteFailure", true);
+            return "wish_list";
+        }
+    }
 }
