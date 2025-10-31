@@ -9,7 +9,7 @@
 <body>
 <div th:replace="~{fragments/header :: header}">...</div>
 <main>
-    <div class="content_wrapper" th:if="${!username.equals(wishList.username) && wishList.notPublic}">
+    <div class="content_wrapper" th:if="${!isLoggedIn && wishList.notPublic || !username.equals(wishList.username) && wishList.notPublic}">
         <div class="error-state">
             <div class="error-state-icon">🔒</div>
             <h1 class="error">Ingen adgang</h1>
@@ -17,15 +17,43 @@
             <a class="button-link" th:href="@{/}">← Tilbage til forsiden</a>
         </div>
     </div>
-    <div class="content_wrapper" th:unless="${!username.equals(wishList.username) && wishList.notPublic}">
-        <h1><span th:text="${wishItem.description}"></span></h1>
-        <p><span th:text="${wishItem.description}"></span></p>
-        <p><span th:text="${#numbers.formatDecimal(wishItem.price, 1, 2)}"></span></p> <!-- 1 is the minimum amount of integers, 2 is the amount of decimals -->
-        <p><span th:text="${#numbers.formatInteger(wishItem.quantity, 1)}"></span></p>
-        <p><span th:if="${wishItem.link != null}" th:text="${wishItem.link}"></span></p>
-        <p><span th:if="${wishItem.reserved}">Dette ønske er allerede reserveret af </span><span th:text="${wishItem.reservedBy}"></span></p>
-        <p><span th:unless="${wishItem.reserved}"></span></p>
-        <a class="button-secondary small" th:href="@{/wish_list/{wishListId}(wishListId=${wishList.id})}">Tilbage</a>
+    <div class="content_wrapper" th:unless="${!isLoggedIn && wishList.notPublic || !username.equals(wishList.username) && wishList.notPublic}">
+        <div class="page-header">
+            <div>
+                <h1 th:text="${wishItem.title}">Wish Item Title</h1>
+                <div class="wishlist-info">
+                    <span class="info-badge" th:if="${wishItem.reserved}">Reserveret</span>
+                </div>
+            </div>
+            <div>
+                <a class="button-link" th:href="@{/wish_list/{wishListId}(wishListId=${wishList.id})}">← Tilbage</a>
+                <a class="button-link" th:href="@{#}">🔧 Rediger</a>
+            </div>
+        </div>
+
+        <div class="error" th:if="${queryFailure}">Noget gik galt. Prøv igen.</div>
+
+        <div>
+            <div th:if="${wishItem.description != null && !wishItem.description.isEmpty()}">
+                <h2>Beskrivelse</h2>
+                <p th:text="${wishItem.description}">Description</p>
+            </div>
+
+            <div th:if="${wishItem.price != 0}">
+                <h2>Pris</h2>
+                <p th:text="${#numbers.formatDecimal(wishItem.price, 1, 2)}">Price</p>
+            </div>
+
+            <div th:id="${wishItem.quantity != 0}">
+                <h2>Antal</h2>
+                <p th:text="${#numbers.formatInteger(wishItem.quantity, 1)}">Quantity</p>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-bar">
+            <a class="button-link" th:if="${wishItem.link != null}" th:href="${wishItem.link}" target="_blank">Gå til butik ↗️</a>
+        </div>
     </div>
 </main>
 

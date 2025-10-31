@@ -12,7 +12,7 @@
 <div th:replace="~{fragments/header :: header}">...</div>
 <main>
     <!-- Access Denied -->
-    <div class="content_wrapper" th:if="${!username.equals(wishList.username) && wishList.notPublic}">
+    <div class="content_wrapper" th:if="${!isLoggedIn && wishList.notPublic || !username.equals(wishList.username) && wishList.notPublic}">
         <div class="error-state">
             <div class="error-state-icon">🔒</div>
             <h1 class="error">Ingen adgang</h1>
@@ -22,7 +22,7 @@
     </div>
 
     <!-- Wish List Content -->
-    <div class="content_wrapper" th:unless="${!username.equals(wishList.username) && wishList.notPublic}">
+    <div class="content_wrapper" th:unless="${!isLoggedIn && wishList.notPublic || !username.equals(wishList.username) && wishList.notPublic}">
         <div class="page-header">
             <div>
                 <h1 th:text="${wishList.title}">Wish List Title</h1>
