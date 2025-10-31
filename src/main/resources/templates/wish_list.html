@@ -27,11 +27,12 @@
         <div class="page-header">
             <div>
                 <h1 th:text="${wishList.title}">Wish List Title</h1>
-                <p class="wishlist-subtitle" th:if="${wishList.description}" th:text="${wishList.description}">
+                <p class="wishlist-subtitle" th:if="${wishList.description != null and !wishList.description.isEmpty()}" th:text="${wishList.description}">
                     Description</p>
                 <div class="wishlist-info">
-                    <span class="info-badge" th:if="${wishList.eventDate}">📅 <span
-                            th:text="${wishList.eventDate}"></span></span>
+                    <span class="info-badge" th:if="${wishList.eventDate != null}">
+                        📅 <span th:text="${wishList.eventDate}"></span>
+                    </span>
                     <span class="info-badge" th:if="${wishList.notPublic}">🔒 Privat</span>
                     <span class="info-badge" th:unless="${wishList.notPublic}">🌐 Offentlig</span>
                 </div>
