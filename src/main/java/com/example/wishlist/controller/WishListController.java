@@ -195,7 +195,7 @@ public class WishListController {
 
         // Ensure current user owns wishList
         WishList wishList = service.getWishList(wishListId);
-        if (wishList.getUsername().equals(session.getAttribute("username"))) {
+        if (!wishList.getUsername().equals(session.getAttribute("username"))) {
             return "redirect:/";
         }
 
@@ -204,7 +204,7 @@ public class WishListController {
             return "redirect:/wish_lists";
         } else {
             model.addAttribute("deleteFailure", true);
-            return "wish_lists";
+            return "redirect:/edit_wish_list/" + wishList.getId();
         }
     }
 
