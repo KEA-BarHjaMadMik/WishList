@@ -42,10 +42,10 @@
 
             <div th:if="${wishItem.price != 0}">
                 <h2>Pris</h2>
-                <p th:text="${#numbers.formatDecimal(wishItem.price, 1, 2)}">Price</p>
+                <p th:text="${#numbers.formatDecimal(wishItem.price, 1, 2)} + ' kr.'">Price</p>
             </div>
 
-            <div th:id="${wishItem.quantity != 0}">
+            <div th:if="${wishItem.quantity != 0}">
                 <h2>Antal</h2>
                 <p th:text="${#numbers.formatInteger(wishItem.quantity, 1)}">Quantity</p>
             </div>
