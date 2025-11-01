@@ -26,12 +26,10 @@ public class WishListController {
 
     @GetMapping("/wish_lists")
     public String getUserWishLists(HttpSession session, Model model) {
-        // Ensure user is logged in
-        if (!SessionUtil.isLoggedIn(session)) {
-            return "redirect:/login";
-        }
+        String loginRedirect = requireLogin(session);
+        if (loginRedirect != null) return loginRedirect;
 
-        String username = (String) session.getAttribute("username");
+        String username = getCurrentUsername(session);
 
         List<WishList> userWishLists = service.getUserWishLists(username);
         if (userWishLists != null) {
@@ -85,10 +83,8 @@ public class WishListController {
 
     @GetMapping("/create_wish_list")
     public String showCreateWishListForm(HttpSession session, Model model) {
-        // Ensure user is logged in
-        if (!SessionUtil.isLoggedIn(session)) {
-            return "redirect:/login";
-        }
+        String loginRedirect = requireLogin(session);
+        if (loginRedirect != null) return loginRedirect;
 
         model.addAttribute("wishList", new WishList());
         return "wish_list_registration_form";
@@ -100,20 +96,14 @@ public class WishListController {
                                  BindingResult bindingResult,
                                  Model model) {
 
-        // Ensure user is logged in
-        if (!SessionUtil.isLoggedIn(session)) {
-            return "redirect:/login";
-        }
+        String loginRedirect = requireLogin(session);
+        if (loginRedirect != null) return loginRedirect;
 
         // Set wish list username to current user
-        String username = (String) session.getAttribute("username");
-        wishList.setUsername(username);
-
-        // Check for field validation errors
-        boolean fieldsHaveErrors = bindingResult.hasErrors();
+        wishList.setUsername(getCurrentUsername(session));
 
         // If validation failed, return to form
-        if (fieldsHaveErrors) {
+        if (bindingResult.hasErrors()) {
             return "wish_list_registration_form";
         }
 
@@ -129,20 +119,14 @@ public class WishListController {
 
     @GetMapping("/wish_list/{wishListId}/add_wish_item")
     public String showAddWishListForm(@PathVariable String wishListId, HttpSession session, Model model) {
-        // Ensure user is logged in
-        if (!SessionUtil.isLoggedIn(session)) {
-            return "redirect:/login";
-        }
+        String loginRedirect = requireLogin(session);
+        if (loginRedirect != null) return loginRedirect;
 
-        // Get wish list and items
-        WishList wishList = service.getWishList(wishListId);
-
-        //Ensure user owns the list
-        String currentUser = (String) session.getAttribute("username");
-        // if successful
-        if (wishList == null || !currentUser.equals(wishList.getUsername())) {
+        WishList wishList = getWishListIfOwner(wishListId, session);
+        if (wishList == null) {
             return "redirect:/";
         }
+
         // Add a blank WishItem to the model
         WishItem wishItem = new WishItem();
         wishItem.setWishListId(Integer.parseInt(wishListId));
@@ -159,19 +143,14 @@ public class WishListController {
                               BindingResult bindingResult,
                               Model model){
 
-        // Ensure user is logged in
-        if (!SessionUtil.isLoggedIn(session)) {
-            return "redirect:/login";
-        }
-        // Get wish list and items
-        WishList wishList = service.getWishList(wishListId);
+        String loginRedirect = requireLogin(session);
+        if (loginRedirect != null) return loginRedirect;
 
-        //Ensure user owns the list
-        String currentUser = (String) session.getAttribute("username");
-        // if successful
-        if (wishList == null || !currentUser.equals(wishList.getUsername())) {
+        WishList wishList = getWishListIfOwner(wishListId, session);
+        if (wishList == null) {
             return "redirect:/";
         }
+
         // If validation failed, return to form
         if (bindingResult.hasErrors()) {
             model.addAttribute("wishList", wishList);
@@ -192,27 +171,15 @@ public class WishListController {
 
     @GetMapping("/edit_wish_list/{wishListId}")
     public String showEditWishListForm(@PathVariable String wishListId, HttpSession session, Model model) {
-        // Ensure user is logged in
-        if (!SessionUtil.isLoggedIn(session)) {
-            return "redirect:/login";
+        String loginRedirect = requireLogin(session);
+        if (loginRedirect != null) return loginRedirect;
+
+        WishList wishList = getWishListIfOwner(wishListId, session);
+        if (wishList == null) {
+            return "redirect:/";
         }
 
-        // Get wish list
-        WishList wishList = service.getWishList(wishListId);
-
-        // if successful
-        if (wishList != null) {
-            // If not current user's wish list, redirect to front page
-            String currentUser = (String) session.getAttribute("username");
-            if (!currentUser.equals(wishList.getUsername())) {
-                return "redirect:/";
-            }
-            // else add to model
-            model.addAttribute("wishList", wishList);
-        } else {
-            model.addAttribute("queryFailure", true);
-        }
-
+        model.addAttribute("wishList", wishList);
         return "wish_list_edit_form";
     }
 
@@ -221,22 +188,15 @@ public class WishListController {
                                  @Valid @ModelAttribute WishList wishList,
                                  BindingResult bindingResult,
                                  Model model) {
-        // Ensure user is logged in
-        if (!SessionUtil.isLoggedIn(session)) {
-            return "redirect:/login";
-        }
+        String loginRedirect = requireLogin(session);
+        if (loginRedirect != null) return loginRedirect;
 
-        // If not current user's wish list, redirect to front page
-        String currentUser = (String) session.getAttribute("username");
-        if (!currentUser.equals(wishList.getUsername())) {
+        if (!isOwner(session, wishList)) {
             return "redirect:/";
         }
 
-        // Check for field validation errors
-        boolean fieldsHaveErrors = bindingResult.hasErrors();
-
         // If validation failed, return to form
-        if (fieldsHaveErrors) {
+        if (bindingResult.hasErrors()) {
             return "wish_list_edit_form";
         }
 
@@ -253,29 +213,21 @@ public class WishListController {
     public String showEditWishItemForm(@PathVariable String wishItemId,
                                        HttpSession session,
                                        Model model){
+        String loginRedirect = requireLogin(session);
+        if (loginRedirect != null) return loginRedirect;
 
-        // Ensure user is logged in
-        if (!SessionUtil.isLoggedIn(session)) {
-            return "redirect:/login";
-        }
-
-        // Get wish item
         WishItem wishItem = service.getWishItem(wishItemId);
-
-        // if successful
-        if (wishItem != null) {
-            // If not current user's wish item, redirect to front page
-            String currentUser = (String) session.getAttribute("username");
-            WishList wishList = service.getWishList(String.valueOf(wishItem.getWishListId()));
-            if (wishList == null || !currentUser.equals(wishList.getUsername())) {
-                return "redirect:/";
-            }
-            // else add to model
-            model.addAttribute("wishItem", wishItem);
-        } else {
+        if (wishItem == null) {
             model.addAttribute("queryFailure", true);
+            return "wish_item_edit_form";
         }
 
+        WishList wishList = service.getWishList(String.valueOf(wishItem.getWishListId()));
+        if (!isOwner(session, wishList)) {
+            return "redirect:/";
+        }
+
+        model.addAttribute("wishItem", wishItem);
         return "wish_item_edit_form";
     }
 
@@ -284,25 +236,16 @@ public class WishListController {
                                  @Valid @ModelAttribute WishItem wishItem,
                                  BindingResult bindingResult,
                                  Model model) {
+        String loginRedirect = requireLogin(session);
+        if (loginRedirect != null) return loginRedirect;
 
-        // Ensure user is logged in
-        if (!SessionUtil.isLoggedIn(session)) {
-            return "redirect:/login";
-        }
-
-        // If not current user's wish list, redirect to front page
-        String currentUser = (String) session.getAttribute("username");
         WishList wishList = service.getWishList(String.valueOf(wishItem.getWishListId()));
-
-        if (wishList == null || !currentUser.equals(wishList.getUsername())) {
+        if (!isOwner(session, wishList)) {
             return "redirect:/";
         }
 
-        // Check for field validation errors
-        boolean fieldsHaveErrors = bindingResult.hasErrors();
-
         // If validation failed, return to form
-        if (fieldsHaveErrors) {
+        if (bindingResult.hasErrors()) {
             model.addAttribute("wishItem", wishItem);
             return "wish_item_edit_form";
         }
@@ -319,14 +262,11 @@ public class WishListController {
 
     @PostMapping("/delete_wish_list/{wishListId}")
     public String deleteWishList(HttpSession session, @PathVariable String wishListId, Model model) {
-        // Ensure user is logged in
-        if (!SessionUtil.isLoggedIn(session)) {
-            return "redirect:/login";
-        }
+        String loginRedirect = requireLogin(session);
+        if (loginRedirect != null) return loginRedirect;
 
-        // Ensure current user owns wishList
-        WishList wishList = service.getWishList(wishListId);
-        if (!wishList.getUsername().equals(session.getAttribute("username"))) {
+        WishList wishList = getWishListIfOwner(wishListId, session);
+        if (wishList == null) {
             return "redirect:/";
         }
 
@@ -341,16 +281,14 @@ public class WishListController {
 
     @PostMapping("/delete_wish_item/{wishItemId}")
     public String deleteWishItem(HttpSession session, @PathVariable String wishItemId, Model model){
-        // Ensure user is logged in
-        if (!SessionUtil.isLoggedIn(session)) {
-            return "redirect:/login";
-        }
+        String loginRedirect = requireLogin(session);
+        if (loginRedirect != null) return loginRedirect;
 
         WishItem wishItem = service.getWishItem(wishItemId);
         int wishListId = wishItem.getWishListId();
         WishList wishList = service.getWishList(String.valueOf(wishListId));
 
-        if (!session.getAttribute("username").equals(wishList.getUsername())) {
+        if (!isOwner(session, wishList)) {
             return "redirect:/";
         }
 
@@ -360,6 +298,28 @@ public class WishListController {
             model.addAttribute("deleteFailure", true);
             return "wish_list";
         }
+    }
+
+    // Helper methods for authentication
+     // Checks if user is logged in, returns redirect if not
+    private String requireLogin(HttpSession session) {
+        return SessionUtil.isLoggedIn(session) ? null : "redirect:/login";
+    }
+
+     //Gets the current logged-in username from session
+    private String getCurrentUsername(HttpSession session) {
+        return (String) session.getAttribute("username");
+    }
+
+     //Checks if the current user owns the given wish list
+    private boolean isOwner(HttpSession session, WishList wishList) {
+        return wishList != null && getCurrentUsername(session).equals(wishList.getUsername());
+    }
+
+     // Fetches a wish list and verifies the current user owns it
+    private WishList getWishListIfOwner(String wishListId, HttpSession session) {
+        WishList wishList = service.getWishList(wishListId);
+        return isOwner(session, wishList) ? wishList : null;
     }
 
 }
