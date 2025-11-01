@@ -17,7 +17,7 @@ public class WishItem {
     @Size(max = 800, message = "Beskrivelse kan højest være 800 tegn.")
     private String description;
 
-    @DecimalMin(value = "0.0", inclusive = true, message = "Pris skal være et positivt tal.")
+    @DecimalMin(value = "0.0", message = "Pris skal være et positivt tal.")
     private double price;
 
     @Min(value = 1, message = "Antal skal være mindst 1.")
