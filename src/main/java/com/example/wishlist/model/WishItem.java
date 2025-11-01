@@ -1,14 +1,31 @@
 package com.example.wishlist.model;
 
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class WishItem {
     private int id;
     private int wishListId;
+
+    @NotBlank(message = "Titel må ikke være tom.")
+    @Size(max = 100, message = "Titel kan højest være 100 tegn.")
     private String title;
     private boolean favourite;
+
+    @Size(max = 800, message = "Beskrivelse kan højest være 800 tegn.")
     private String description;
+
+    @DecimalMin(value = "0.0", inclusive = true, message = "Pris skal være et positivt tal.")
     private double price;
+
+    @Min(value = 1, message = "Antal skal være mindst 1.")
     private int quantity;
+
+    @Size(max = 400, message = "Link kan højest være 400 tegn.")
     private String link;
+
     private boolean reserved;
     private String reservedBy;
 

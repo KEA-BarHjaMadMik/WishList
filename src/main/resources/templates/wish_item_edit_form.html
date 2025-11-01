@@ -21,6 +21,8 @@
             <form class="modern-form" method="post" th:action="@{/edit_wish_item}" th:object="${wishItem}">
                 <input type="hidden" th:field="*{id}"/>
                 <input type="hidden" th:field="*{wishListId}"/>
+                <input type="hidden" th:field="*{reserved}"/>
+                <input type="hidden" th:field="*{reservedBy}"/>
 
                 <div class="form-group">
                     <label for="title">Titel:</label>
