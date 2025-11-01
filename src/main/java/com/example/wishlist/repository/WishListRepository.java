@@ -154,6 +154,29 @@ public class WishListRepository {
         }
     }
 
+    public boolean updateWishItem(WishItem wishItem) {
+        String sql = "UPDATE wish_item SET title = ?, favourite = ?, description = ?, price = ?, quantity = ?, link = ?, reserved = ?, reserved_by = ? WHERE id = ?";
+
+        try {
+            int affectedRows = jdbcTemplate.update(
+                    sql,
+                    wishItem.getTitle(),
+                    wishItem.isFavourite(),
+                    wishItem.getDescription(),
+                    wishItem.getPrice(),
+                    wishItem.getQuantity(),
+                    wishItem.getLink(),
+                    wishItem.isReserved(),
+                    wishItem.getReservedBy(),
+                    wishItem.getId()
+            );
+            return affectedRows == 1;
+        } catch (DataAccessException e) {
+            System.err.println("Database error during wish item update: " + e.getMessage());
+            return false;
+        }
+    }
+
     public WishItem getWishItem(String wishItemId){
         String sql = "SELECT id, wish_list_id, title, favourite, description, price, quantity, link, reserved, reserved_by FROM wish_item WHERE id = ?";
 

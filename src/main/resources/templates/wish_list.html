@@ -72,7 +72,8 @@
                     <a class="button-secondary small"
                        th:href="@{/wish_item/{wishItemId}(wishItemId=${wishListItem.id})}">Se ønske</a>
 
-                    <a class="button-secondary small">Rediger</a>
+                    <a class="button-secondary small"
+                       th:href="@{/edit_wish_item/{wishItemId}(wishItemId=${wishListItem.id})}">Rediger</a>
 
                     <form th:action="@{/delete_wish_item/{wishItemId}(wishItemId=${wishListItem.id})}" method="post">
                             <button type="submit" class="button-secondary small danger"

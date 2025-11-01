@@ -31,12 +31,16 @@ public class WishListService {
         return repository.createWishListAndReturnId(wishList);
     }
 
-    public WishItem getWishItem(String wishItemId){
+    public WishItem getWishItem(String wishItemId) {
         return repository.getWishItem(wishItemId);
     }
 
     public boolean updateWishList(WishList wishList) {
         return repository.updateWishList(wishList);
+    }
+
+    public boolean updateWishItem(WishItem wishItem) {
+        return repository.updateWishItem(wishItem);
     }
 
     public boolean deleteWishList(String wishListId) {
@@ -47,6 +51,8 @@ public class WishListService {
         return repository.deleteWishItem(wishItemId);
     }
 
-    public boolean addWishItem(WishItem wishItem) { return repository.addWishItem(wishItem); }
+    public boolean addWishItem(WishItem wishItem) {
+        return repository.addWishItem(wishItem);
+    }
 
 }

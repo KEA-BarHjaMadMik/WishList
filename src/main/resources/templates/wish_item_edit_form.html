@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Tilføj ønske - WishList</title>
+    <title>Rediger ønske</title>
     <link rel="icon"
           href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎃</text></svg>">
     <link th:href="@{/css/main.css}" rel="stylesheet">
@@ -15,17 +15,15 @@
     <div class="content_wrapper form-page">
         <div class="form-container">
             <div class="form-header">
-                <h1>Tilføj nyt ønske</h1>
-                <p>Tilføj et nyt ønske til "<span th:text="${wishList.title}">ønskeseddel</span>"</p>
+                <h1>Rediger ønske</h1>
             </div>
 
-            <form class="modern-form" method="post"
-                  th:action="@{/wish_list/{wishListId}/add_wish_item(wishListId=${wishList.id})}"
-                  th:object="${wishItem}">
+            <form class="modern-form" method="post" th:action="@{/edit_wish_item}" th:object="${wishItem}">
+                <input type="hidden" th:field="*{id}"/>
                 <input type="hidden" th:field="*{wishListId}"/>
 
                 <div class="form-group">
-                    <label for="title">Titel</label>
+                    <label for="title">Titel:</label>
                     <input id="title" type="text" th:field="*{title}" placeholder="F.eks. Ny bog, legetøj, osv." required/>
                     <div class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
                 </div>
@@ -36,46 +34,55 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="description">Beskrivelse (valgfri)</label>
-                    <textarea id="description" th:field="*{description}" rows="5"
-                              placeholder="Beskriv dit ønske i detaljer..."></textarea>
+                    <label for="description">Beskrivelse (valgfri):</label>
+                    <textarea id="description" th:field="*{description}" rows="5" cols="40" placeholder="Beskriv dit ønske i detaljer..."></textarea>
                     <div class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
                 </div>
 
                 <div class="form-group">
-                    <label for="price">Pris (kr.) (valgfri)</label>
-                    <input id="price" type="number" th:field="*{price}" step="0.01" min="0" value="0" placeholder="0.00"/>
+                    <label for="price">Pris (kr.) (valgfri):</label>
+                    <input id="price" type="number" step="0.01" min="0" th:field="*{price}"/>
                     <div class="error" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
                 </div>
 
                 <div class="form-group">
-                    <label for="quantity">Antal</label>
-                    <input id="quantity" type="number" th:field="*{quantity}" min="1" th:value="1" placeholder="1" required/>
+                    <label for="qty">Antal:</label>
+                    <input id="qty" type="number" step="1" min="1" th:field="*{quantity}"/>
                     <div class="error" th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}"></div>
                 </div>
 
                 <div class="form-group">
-                    <label for="link">Link til produkt (valgfri)</label>
+                    <label for="link">Link til product (valgfri):</label>
                     <input id="link" type="url" th:field="*{link}" placeholder="https://..."/>
                     <div class="error" th:if="${#fields.hasErrors('link')}" th:errors="*{link}"></div>
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="submit-button">Tilføj ønske</button>
-                    <a th:href="@{/wish_list/{wishListId}(wishListId=${wishList.id})}" class="button-secondary">Annuller</a>
-                </div>
+                    <button type="submit" class="submit-button">Opdater</button>
 
+                    <a th:href="@{/wish_list/{wishListId}(wishListId = ${wishItem.wishListId})}" class="button-secondary">Annuller</a>
+                </div>
                 <div class="error" th:if="${#fields.hasErrors()}">
                     Der er fejl i formularen. Ret venligst fejlene ovenfor.
                 </div>
 
-                <div class="error" th:if="${saveFailure}">
+                <div class="error" th:if="${updateFailure}">
                     Noget gik galt. Prøv igen.
                 </div>
             </form>
+
+            <form th:action="@{/delete_wish_item/{wishItemId}(wishItemId = ${wishItem.id})}" method="post">
+                <div class="form-actions">
+                    <button type="submit" class="button-danger"
+                            onclick="return confirm('Er du sikker på at du vil slette dette ønske permanent? Denne handling kan ikke fortrydes!')">
+                        Slet ønske
+                    </button>
+                </div>
+            </form>
+            <div class="error" th:if="${deleteFailure}">🚫 Noget gik galt. Prøv igen.
+            </div>
         </div>
     </div>
 </main>
-<div th:replace="~{fragments/footer :: footer}">...</div>
 </body>
 </html>
