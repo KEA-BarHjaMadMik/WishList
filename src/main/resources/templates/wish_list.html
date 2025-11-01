@@ -51,7 +51,7 @@
             <div class="empty-state-icon">🎈</div>
             <h2>Ingen ønsker endnu</h2>
             <p>Tilføj dine første ønsker til denne ønskeseddel</p>
-            <a class="button-link" href="#">+ Tilføj ønske</a>
+            <a class="button-link" th:href="@{/wish_list/{wishListId}/add_wish_item(wishListId=${wishList.id})}">+ Tilføj ønske</a>
         </div>
 
         <!-- Wish Items Grid -->
@@ -86,7 +86,7 @@
 
         <!-- Action Buttons -->
         <div class="action-bar" th:unless="${wishListItems.isEmpty()}">
-            <a class="button-link" href="#">+ Tilføj ønske</a>
+            <a class="button-link" th:href="@{/wish_list/{wishListId}/add_wish_item(wishListId=${wishList.id})}">+ Tilføj ønske</a>
         </div>
     </div>
 </main>
