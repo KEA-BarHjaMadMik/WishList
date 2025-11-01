@@ -36,16 +36,6 @@ public class WishListRepository {
         }
     }
 
-    private RowMapper<WishList> getWishListRowMapper() {
-        return ((rs, rowNum) -> new WishList(
-                rs.getInt("id"),
-                rs.getString("username"),
-                rs.getString("title"),
-                rs.getString("description"),
-                rs.getDate("eventdate") != null ? rs.getDate("eventdate").toLocalDate() : null,
-                rs.getBoolean("not_public")));
-    }
-
     public WishList getWishList(String wishListId) {
         String sql = "SELECT id, username, title, description, eventdate, not_public FROM wish_list WHERE id = ?";
 
@@ -73,18 +63,18 @@ public class WishListRepository {
         }
     }
 
-    private RowMapper<WishItem> getWishItemRowMapper() {
-        return ((rs, rowNum) -> new WishItem(
-                rs.getInt("id"),
-                rs.getInt("wish_list_id"),
-                rs.getString("title"),
-                rs.getBoolean("favourite"),
-                rs.getString("description"),
-                rs.getDouble("price"),
-                rs.getInt("quantity"),
-                rs.getString("link"),
-                rs.getBoolean("reserved"),
-                rs.getString("reserved_by")));
+    public WishItem getWishItem(String wishItemId){
+        String sql = "SELECT id, wish_list_id, title, favourite, description, price, quantity, link, reserved, reserved_by FROM wish_item WHERE id = ?";
+
+        RowMapper<WishItem> rowMapper = getWishItemRowMapper();
+
+        try {
+            List<WishItem> results = jdbcTemplate.query(sql, rowMapper, wishItemId);
+            return results.isEmpty() ? null : results.getFirst();
+        } catch (DataAccessException e) {
+            System.err.println("Database error during wish list query: " + e.getMessage());
+            return null;
+        }
     }
 
     public int createWishListAndReturnId(WishList wishList) {
@@ -127,6 +117,27 @@ public class WishListRepository {
         }catch (DataAccessException e) {
             System.err.println("Database error during wish list creation: " + e.getMessage());
             return -1;
+        }
+    }
+
+    public boolean addWishItem(WishItem wishItem) {
+        String sql = "INSERT INTO wish_item (wish_list_id, title, favourite, description, price, quantity, link, reserved, reserved_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try {
+            int affectedRows = jdbcTemplate.update(sql,
+                    wishItem.getWishListId(),
+                    wishItem.getTitle(),
+                    wishItem.isFavourite(),
+                    wishItem.getDescription(),
+                    wishItem.getPrice(),
+                    wishItem.getQuantity(),
+                    wishItem.getLink(),
+                    wishItem.isReserved(),
+                    wishItem.getReservedBy()
+            );
+            return affectedRows == 1;
+        } catch (DataAccessException e) {
+            System.err.println("Database error during wish item insertion: " + e.getMessage());
+            return false;
         }
     }
 
@@ -177,20 +188,6 @@ public class WishListRepository {
         }
     }
 
-    public WishItem getWishItem(String wishItemId){
-        String sql = "SELECT id, wish_list_id, title, favourite, description, price, quantity, link, reserved, reserved_by FROM wish_item WHERE id = ?";
-
-        RowMapper<WishItem> rowMapper = getWishItemRowMapper();
-
-        try {
-            List<WishItem> results = jdbcTemplate.query(sql, rowMapper, wishItemId);
-            return results.isEmpty() ? null : results.getFirst();
-        } catch (DataAccessException e) {
-            System.err.println("Database error during wish list query: " + e.getMessage());
-            return null;
-        }
-    }
-
     public boolean deleteWishList(String wishListId) {
         String sql = "DELETE FROM wish_list WHERE id = ?";
 
@@ -215,24 +212,27 @@ public class WishListRepository {
         }
     }
 
-    public boolean addWishItem(WishItem wishItem) {
-        String sql = "INSERT INTO wish_item (wish_list_id, title, favourite, description, price, quantity, link, reserved, reserved_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try {
-            int affectedRows = jdbcTemplate.update(sql,
-                    wishItem.getWishListId(),
-                    wishItem.getTitle(),
-                    wishItem.isFavourite(),
-                    wishItem.getDescription(),
-                    wishItem.getPrice(),
-                    wishItem.getQuantity(),
-                    wishItem.getLink(),
-                    wishItem.isReserved(),
-                    wishItem.getReservedBy()
-            );
-            return affectedRows == 1;
-        } catch (DataAccessException e) {
-            System.err.println("Database error during wish item insertion: " + e.getMessage());
-            return false;
-        }
+    private RowMapper<WishList> getWishListRowMapper() {
+        return ((rs, rowNum) -> new WishList(
+                rs.getInt("id"),
+                rs.getString("username"),
+                rs.getString("title"),
+                rs.getString("description"),
+                rs.getDate("eventdate") != null ? rs.getDate("eventdate").toLocalDate() : null,
+                rs.getBoolean("not_public")));
+    }
+
+    private RowMapper<WishItem> getWishItemRowMapper() {
+        return ((rs, rowNum) -> new WishItem(
+                rs.getInt("id"),
+                rs.getInt("wish_list_id"),
+                rs.getString("title"),
+                rs.getBoolean("favourite"),
+                rs.getString("description"),
+                rs.getDouble("price"),
+                rs.getInt("quantity"),
+                rs.getString("link"),
+                rs.getBoolean("reserved"),
+                rs.getString("reserved_by")));
     }
 }
