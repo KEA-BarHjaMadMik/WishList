@@ -48,14 +48,14 @@ button:hover, .button-link:hover {
 }
 
 .button-secondary {
-    background: var(--spooky-black);
-    color: var(--primary-orange) !important;
-    border: 2px solid var(--primary-orange);
+    background: linear-gradient(135deg, var(--primary-orange), var(--witch-purple));
+    color: var(--white) !important;
+    border: none;
 }
 
 .button-secondary:hover {
-    background: var(--primary-orange);
-    color: var(--spooky-black) !important;
+    box-shadow: var(--shadow-md-orange);
+    filter: brightness(1.1);
 }
 
 /* Header */
@@ -112,6 +112,12 @@ textarea {
     background: var(--spooky-black);
     color: var(--text-light);
     border: 2px solid var(--border-dark);
+}
+
+input[type="checkbox"] {
+    accent-color: var(--primary-orange);
+    width: 20px;
+    height: 20px;
 }
 
 input[type="text"]:focus,
@@ -181,6 +187,11 @@ label {
 .hero-subtitle,
 .feature-card p {
     color: #c0c0c0;
+}
+
+.wishlist-subtitle {
+    border-bottom: 1px solid var(--border-dark);
+    padding-bottom: 0.75rem;
 }
 
 .card-text strong {
@@ -258,6 +269,10 @@ a:hover {
 }
 
 /* Features */
+.section-title {
+    color: var(--primary-orange);
+}
+
 .feature-card h3 {
     color: var(--pumpkin-orange);
 }
@@ -311,6 +326,11 @@ a:hover {
     color: #c0c0c0;
 }
 
+/* Delete action section */
+form + form {
+    border-top: 2px solid var(--border-dark);
+}
+
 /* Settings Page */
 .section-header h2 {
     color: var(--primary-orange);
@@ -336,22 +356,59 @@ a:hover {
 }
 
 .button-danger {
-    background: var(--witch-purple);
+    background: linear-gradient(135deg, #e74c3c, var(--dark-purple));
 }
 
 .button-danger:hover {
-    background: var(--dark-purple);
-    box-shadow: 0 0 20px rgba(107, 45, 92, 0.5);
+    filter: brightness(1.1);
+    box-shadow: var(--shadow-md-orange);
 }
 
-/* Quantity Display */
-.quantity-value {
+.button-reserve {
+    background: linear-gradient(135deg, var(--halloween-green), #5a8f00);
+}
+
+.button-reserve:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 0 15px rgba(127, 184, 0, 0.5);
+}
+
+.button-unreserve {
+    background: linear-gradient(135deg, var(--primary-orange), var(--pumpkin-orange));
+}
+
+.button-unreserve:hover {
+    filter: brightness(1.1);
+    box-shadow: var(--shadow-md-orange);
+}
+
+/* Quantity and Price Display */
+.quantity-value,
+.price-value {
     color: var(--primary-orange);
 }
 
-.wish-item-quantity {
+.wish-item-quantity,
+.wish-item-price {
     background: var(--spooky-black);
     border: 1px solid var(--border-dark);
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+}
+
+.price-label,
+.quantity-label {
+    color: #c0c0c0;
+}
+
+.external-link-badge {
+    background: linear-gradient(135deg, var(--primary-orange), var(--witch-purple));
+    color: var(--white) !important;
+}
+
+.external-link-badge:hover {
+    filter: brightness(1.2);
+    box-shadow: 0 0 10px rgba(255, 107, 53, 0.4);
 }
 
 /* Action Bar */
