@@ -256,7 +256,7 @@ public class WishListController {
 
         // Proceed with update
         if (service.updateWishItem(wishItem)) {
-            return "redirect:/wish_item/" + wishItem.getId();
+            return "redirect:/wish_list/" + wishItem.getWishListId();
         } else {
             model.addAttribute("wishItem", wishItem);
             model.addAttribute("updateFailure", true);
