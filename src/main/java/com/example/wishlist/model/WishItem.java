@@ -122,6 +122,7 @@ public class WishItem {
     }
 
     public void setReservedBy(String reservedBy) {
-        this.reservedBy = reservedBy;
+        // Converts empty string to null to satisfy foreign key constraint
+        this.reservedBy = (reservedBy != null && reservedBy.trim().isEmpty()) ? null : reservedBy;
     }
 }
