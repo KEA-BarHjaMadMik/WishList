@@ -37,7 +37,6 @@ class WishListControllerTest {
         eventDate = LocalDate.parse("2030-12-12");
         wishList.add(new WishList(1, "tester", "test", "1", eventDate, false));
         wishList.add(new WishList(2, "tester", "test2", "2", eventDate, false));
-
     }
 
     @AfterEach
@@ -56,6 +55,31 @@ class WishListControllerTest {
         verify(wishListService).getUserWishLists("tester");
     }
 
+    @Test
+    void shouldRegisterWishList() throws Exception {
+        WishList wishList3 = new WishList(3, "tester", "test3", "3", eventDate, false);
 
+        mockMvc.perform(post("/create_wish_list")
+                        .param("title", "test3")
+                        .param("description", "3")
+                        .param("eventDate", String.valueOf(eventDate))
+                        .param("notPublic", "false"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/wish_list/" + wishList3.getId()));
 
+        verify(wishListService).createWishListAndReturnId(wishList3);
+    }
+
+    @Test
+    void shouldGetWishList() throws Exception {
+        when(wishListService.getWishList("1")).thenReturn(wishList.getFirst());
+
+        mockMvc.perform(get("/wish_list/1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("wish_list"))
+                .andExpect(model().attributeExists("wishList"))
+                .andExpect(model().attributeExists("wishListItems"));
+
+        verify(wishListService).getWishList("1");
+    }
 }
