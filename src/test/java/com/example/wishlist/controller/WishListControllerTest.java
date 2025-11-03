@@ -1,10 +1,8 @@
 package com.example.wishlist.controller;
 
-import com.example.wishlist.model.User;
 import com.example.wishlist.model.WishItem;
 import com.example.wishlist.model.WishList;
 import com.example.wishlist.service.WishListService;
-import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,8 +14,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -33,19 +29,24 @@ class WishListControllerTest {
     @MockitoBean
     private WishListService wishListService;
 
-    private List<WishList> wishList;
-    private LocalDate eventDate;
-    private WishItem wishItem;
-    private WishList userWishList;
+    private MockHttpSession session;
+
+//    private List<WishList> wishList;
+//    private LocalDate eventDate;
+//    private WishItem wishItem;
+//    private WishList userWishList;
 
 
     @BeforeEach
     void setUp() {
-        eventDate = LocalDate.parse("2030-12-12");
-        wishList = new ArrayList<>();
-        wishList.add(new WishList(1, "tester", "test", "1", eventDate, false));
-        wishList.add(new WishList(2, "tester", "test2", "2", eventDate, true));
-        wishItem = new WishItem(1, 1, "test item", true, "a test item", 0.00, 2, "", true, "test_wishee");
+        session = new MockHttpSession();
+        session.setAttribute("username", "test_wisher");
+
+//        eventDate = LocalDate.parse("2030-12-12");
+//        wishList = new ArrayList<>();
+//        wishList.add(new WishList(1, "test_wisher", "test", "1", eventDate, false));
+//        wishList.add(new WishList(2, "test_wisher", "test2", "2", eventDate, true));
+//        wishItem = new WishItem(1, 1, "test item", true, "a test item", 0.00, 2, "", true, "test_wishee");
     }
 
     @AfterEach
@@ -54,14 +55,13 @@ class WishListControllerTest {
 
     @Test
     void shouldGetUserWishLists() throws Exception {
-        when(wishListService.getUserWishLists("tester")).thenReturn(wishListService.getUserWishLists("tester"));
-
-        mockMvc.perform(get("/wish_lists"))
+        mockMvc.perform(get("/wish_lists")
+                        .session(session))
                 .andExpect(status().isOk())
                 .andExpect(view().name("wish_lists"))
                 .andExpect(model().attributeExists("userWishLists"));
 
-        verify(wishListService).getUserWishLists("tester");
+        verify(wishListService, times(1)).getUserWishLists("test_wisher");
     }
 
     @Test
@@ -69,6 +69,7 @@ class WishListControllerTest {
         when(wishListService.createWishListAndReturnId(any(WishList.class))).thenReturn(1);
 
         mockMvc.perform(post("/create_wish_list")
+                        .session(session)
                         .param("title", "test3")
                         .param("description", "3")
                         .param("eventDate", "2030-12-12")
@@ -88,11 +89,16 @@ class WishListControllerTest {
 
     @Test
     void shouldGetWishList() throws Exception {
-        userWishList = wishList.getFirst();
-
+        WishList userWishList = new WishList(1,
+                "test_wisher",
+                "test",
+                "1",
+                LocalDate.of(2030, 12, 12),
+                false);
         when(wishListService.getWishList("1")).thenReturn(userWishList);
 
-        mockMvc.perform(get("/wish_list/" + userWishList.getId()))
+        mockMvc.perform(get("/wish_list/" + userWishList.getId())
+                        .session(session))
                 .andExpect(status().isOk())
                 .andExpect(view().name("wish_list"))
                 .andExpect(model().attributeExists("wishList"))
@@ -103,9 +109,16 @@ class WishListControllerTest {
 
     @Test
     void shouldAddWishItem() throws Exception {
-        userWishList = wishList.getFirst();
+        String wishListId = "1";
+        WishList wishList = new WishList();
+        wishList.setId(10);
+        wishList.setUsername("test_wisher");
 
-        mockMvc.perform(post("/wish_list/" + userWishList.getId() + "/add_wish_item")
+        when(wishListService.getWishList(wishListId)).thenReturn(wishList);
+        when(wishListService.addWishItem(any(WishItem.class))).thenReturn(true);
+
+        mockMvc.perform(post("/wish_list/{wishListId}/add_wish_item", wishListId)
+                        .session(session)
                         .param("wishListId", "1")
                         .param("title", "test item")
                         .param("favourite", "false")
@@ -114,7 +127,7 @@ class WishListControllerTest {
                         .param("quantity", "1")
                         .param("link", ""))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/wish_list/" + userWishList.getId()));
+                .andExpect(view().name("redirect:/wish_list/" + wishListId));
 
         ArgumentCaptor<WishItem> captor = ArgumentCaptor.forClass(WishItem.class);
         verify(wishListService).addWishItem(captor.capture());
@@ -131,11 +144,26 @@ class WishListControllerTest {
 
     @Test
     void shouldRemoveWishItem() throws Exception {
-        when(wishListService.deleteWishItem("1")).thenReturn(true);
+        String wishItemId = "5";
+        int wishListId = 10;
 
-        mockMvc.perform(post("/delete_wish_item/" + wishItem.getId()))
-                .andExpect(view().name("/wish_list/" + wishItem.getWishListId()));
+        WishItem wishItem = new WishItem();
+        wishItem.setId(5);
+        wishItem.setWishListId(wishListId);
 
-        verify(wishListService, times(1)).deleteWishItem("1");
+        WishList wishList = new WishList();
+        wishList.setId(wishListId);
+        wishList.setUsername("test_wisher");
+
+        when(wishListService.getWishItem(wishItemId)).thenReturn(wishItem);
+        when(wishListService.getWishList(String.valueOf(wishListId))).thenReturn(wishList);
+        when(wishListService.deleteWishItem(wishItemId)).thenReturn(true);
+
+        mockMvc.perform(post("/delete_wish_item/{wishItemId}", wishItemId)
+                        .session(session))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/wish_list/" + wishListId));
+
+        verify(wishListService, times(1)).deleteWishItem("5");
     }
 }
