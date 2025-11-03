@@ -39,8 +39,8 @@
             </div>
             <div>
                 <a class="button-link" th:href="@{/wish_lists}">← Tilbage</a>
-                <a class="button-link" th:href="@{/edit_wish_list/{wishListId}(wishListId = ${wishList.id})}">🔧
-                    Rediger</a>
+                <a class="button-link" th:if="${isOwner}"
+                   th:href="@{/edit_wish_list/{wishListId}(wishListId = ${wishList.id})}">🔧 Rediger</a>
             </div>
         </div>
 
@@ -50,8 +50,10 @@
         <div class="empty-state" th:if="${wishListItems.isEmpty()}">
             <div class="empty-state-icon">🎈</div>
             <h2>Ingen ønsker endnu</h2>
-            <p>Tilføj dine første ønsker til denne ønskeseddel</p>
-            <a class="button-link" th:href="@{/wish_list/{wishListId}/add_wish_item(wishListId=${wishList.id})}">+ Tilføj ønske</a>
+            <p th:if="${isOwner}">Tilføj dine første ønsker til denne ønskeseddel</p>
+            <p th:unless="${isOwner}">Denne ønskeseddel har ingen ønsker endnu</p>
+            <a class="button-link" th:if="${isOwner}"
+               th:href="@{/wish_list/{wishListId}/add_wish_item(wishListId=${wishList.id})}">+ Tilføj ønske</a>
         </div>
 
         <!-- Wish Items Grid -->
@@ -62,31 +64,58 @@
                     <h3 th:text="${wishListItem.title}">Item Title</h3>
                     <span class="favourite-star" th:if="${wishListItem.favourite}">⭐</span>
                 </div>
+                <div class="wishlist-info">
+                    <span class="info-badge" th:if="${wishListItem.reserved}">🔒 Reserveret</span>
+                </div>
                 <div class="wish-item-body">
                     <div class="wish-item-quantity">
                         <span class="quantity-label">Antal:</span>
                         <span class="quantity-value" th:text="${wishListItem.quantity}">1</span>
+                    </div>
+                    <div class="wish-item-price" th:if="${wishListItem.price != 0}">
+                        <span class="price-label">Pris:</span>
+                        <span class="price-value" th:text="${#numbers.formatDecimal(wishListItem.price, 1, 2)} + ' kr.'">0.00 kr.</span>
+                    </div>
+                    <div class="wish-item-link" th:if="${wishListItem.link != null and !wishListItem.link.isEmpty()}">
+                        <a th:href="${wishListItem.link}" target="_blank" class="external-link-badge">🔗 Link til butik</a>
                     </div>
                 </div>
                 <div class="wish-item-footer">
                     <a class="button-secondary small"
                        th:href="@{/wish_item/{wishItemId}(wishItemId=${wishListItem.id})}">Se ønske</a>
 
-                    <a class="button-secondary small"
+                    <!-- Owner buttons -->
+                    <a class="button-secondary small" th:if="${isOwner}"
                        th:href="@{/edit_wish_item/{wishItemId}(wishItemId=${wishListItem.id})}">Rediger</a>
 
-                    <form th:action="@{/delete_wish_item/{wishItemId}(wishItemId=${wishListItem.id})}" method="post">
-                            <button type="submit" class="button-secondary small danger"
+                    <form th:if="${isOwner}"
+                          th:action="@{/delete_wish_item/{wishItemId}(wishItemId=${wishListItem.id})}" method="post">
+                            <button type="submit" class="button-secondary small"
                                     onclick="return confirm('Er du sikker på at du vil slette ønsket? Denne handling kan ikke fortrydes!')">
                                 Slet
                             </button>
+                    </form>
+
+                    <!-- Non-owner reserve buttons -->
+                    <form th:if="${!isOwner and isLoggedIn and !wishListItem.reserved}"
+                          th:action="@{/reserve_wish_item/{wishItemId}(wishItemId=${wishListItem.id})}" method="post">
+                        <button type="submit" class="button-reserve small">
+                            Reserver
+                        </button>
+                    </form>
+
+                    <form th:if="${!isOwner and isLoggedIn and wishListItem.reserved and wishListItem.reservedBy != null and wishListItem.reservedBy.equals(username)}"
+                          th:action="@{/unreserve_wish_item/{wishItemId}(wishItemId=${wishListItem.id})}" method="post">
+                        <button type="submit" class="button-unreserve small">
+                            Annuller reservering
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
 
         <!-- Action Buttons -->
-        <div class="action-bar" th:unless="${wishListItems.isEmpty()}">
+        <div class="action-bar" th:if="${!wishListItems.isEmpty() and isOwner}">
             <a class="button-link" th:href="@{/wish_list/{wishListId}/add_wish_item(wishListId=${wishList.id})}">+ Tilføj ønske</a>
         </div>
     </div>

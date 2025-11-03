@@ -28,8 +28,9 @@ public class WishItem {
 
     private boolean reserved;
     private String reservedBy;
-
-    public WishItem(){}
+    public WishItem(){
+        this.quantity = 1; // sets item quantity to 1 globally
+    }
 
     public WishItem(int id, int wishListId, String title, boolean favourite, String description, double price, int quantity, String link, boolean reserved, String reservedBy) {
         this.id = id;
@@ -121,6 +122,7 @@ public class WishItem {
     }
 
     public void setReservedBy(String reservedBy) {
-        this.reservedBy = reservedBy;
+        // Converts empty string to null to satisfy foreign key constraint
+        this.reservedBy = (reservedBy != null && reservedBy.trim().isEmpty()) ? null : reservedBy;
     }
 }

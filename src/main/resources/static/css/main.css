@@ -86,7 +86,7 @@ textarea {
 }
 
 /* Buttons */
-button, .button-link, .submit-button, .button-secondary {
+button, .button-link, .submit-button, .button-secondary, .button-danger, .button-reserve, .button-unreserve {
     display: inline-block;
     padding: 0.75rem 1.5rem;
     background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
@@ -107,14 +107,14 @@ button:hover, .button-link:hover, .submit-button:hover {
 }
 
 .button-secondary {
-    background: var(--white);
-    color: var(--primary-blue) !important;
-    border: 2px solid var(--primary-blue);
+    background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
+    color: var(--white) !important;
+    border: none;
 }
 
 .button-secondary:hover {
-    background: var(--primary-blue);
-    color: var(--white) !important;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
 .button-secondary.small {
@@ -122,19 +122,37 @@ button:hover, .button-link:hover, .submit-button:hover {
     font-size: 0.9rem;
 }
 
-.button-secondary.danger:hover {
-    background: #e74c3c;
-    border-color: #e74c3c;
-}
-
 .button-danger {
-    background: #e74c3c;
-    color: var(--white);
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: var(--white) !important;
 }
 
 .button-danger:hover {
-    background: #c0392b;
-    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    filter: brightness(1.1);
+}
+
+.button-reserve {
+    background: linear-gradient(135deg, #48c774, #3ec46d);
+    color: var(--white) !important;
+}
+
+.button-reserve:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    filter: brightness(1.1);
+}
+
+.button-unreserve {
+    background: linear-gradient(135deg, #ff9800, #ff6b00);
+    color: var(--white) !important;
+}
+
+.button-unreserve:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    filter: brightness(1.1);
 }
 
 .button-link.large, .button-secondary.large {
@@ -156,6 +174,16 @@ button:hover, .button-link:hover, .submit-button:hover {
     justify-content: space-between;
     max-width: 1400px;
     margin: 0 auto;
+    gap: 2rem;
+}
+
+.header-container > * {
+    flex-shrink: 0;
+}
+
+.header-container .main-nav {
+    flex-grow: 1;
+    justify-content: flex-start;
 }
 
 .logo-img {
@@ -348,7 +376,25 @@ main {
 
 .wish-item-footer {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
+    align-items: stretch;
+}
+
+.wish-item-footer form {
+    margin: 0;
+    display: flex;
+    flex: 1;
+}
+
+.wish-item-footer a,
+.wish-item-footer button {
+    flex: 1;
+    min-width: fit-content;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .card-button {
@@ -377,6 +423,85 @@ main {
     color: var(--primary-blue);
     font-weight: 700;
     font-size: 1.1rem;
+}
+
+.wish-item-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.wish-item-quantity,
+.wish-item-price {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    background: var(--background-light);
+    border: 1px solid var(--border-light);
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+}
+
+.wish-item-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.price-label,
+.quantity-label {
+    color: var(--text-medium);
+    font-weight: 500;
+}
+
+.price-value {
+    color: var(--primary-blue);
+    font-weight: 700;
+}
+
+.external-link-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.4rem 0.8rem;
+    background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
+    color: var(--white) !important;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.external-link-badge:hover {
+    transform: translateX(3px);
+    box-shadow: var(--shadow-sm);
+}
+
+.wishlist-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.wishlist-subtitle {
+    color: var(--text-medium);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.action-bar {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--border-light);
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
 }
 
 /* Empty & Error States */
@@ -560,6 +685,21 @@ main {
     margin: 0;
 }
 
+/* Checkbox groups - display inline */
+.form-group:has(input[type="checkbox"]) {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.form-group input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin: 0;
+    accent-color: var(--primary-blue);
+}
+
 .submit-button {
     width: 100%;
     padding: 1rem;
@@ -575,9 +715,28 @@ main {
 .form-actions button, .form-actions a {
     flex: 1;
     text-align: center;
-    width: 100%;
     padding: 1rem;
-    margin-top: 1rem;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.form-actions .submit-button {
+    width: auto;
+}
+
+/* Delete action section - separated from main form */
+form + form {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--border-light);
+}
+
+form + form .form-actions {
+    display: flex;
+}
+
+form + form .button-danger {
+    width: 100%;
 }
 
 .form-footer {
@@ -653,4 +812,74 @@ main {
 *:focus-visible {
     outline: 3px solid var(--primary-blue);
     outline-offset: 2px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .wishlist-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .wish-items-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .page-header > div:last-child {
+        display: flex;
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    .page-header > div:last-child a {
+        flex: 1;
+        text-align: center;
+    }
+
+    .content_wrapper {
+        padding: 1.5rem;
+        margin: 1.5rem auto;
+    }
+
+    .header-container {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+
+    .header-container > * {
+        width: 100%;
+        text-align: center;
+    }
+
+    .main-nav {
+        gap: 0.75rem;
+        justify-content: center;
+    }
+
+    .logo-section {
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .hero-title {
+        font-size: 2.25rem;
+    }
 }

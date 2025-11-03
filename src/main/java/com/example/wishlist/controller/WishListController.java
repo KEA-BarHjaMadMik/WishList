@@ -42,10 +42,12 @@ public class WishListController {
     }
 
     @GetMapping("/wish_list/{wishListId}")
-    public String getWishList(@PathVariable String wishListId, Model model) {
+    public String getWishList(@PathVariable String wishListId, HttpSession session, Model model) {
         // Get wish list and items
         WishList wishList = service.getWishList(wishListId);
         List<WishItem> wishListItems = service.getWishListItems(wishListId);
+        // Add session info and ownership status to model
+        addSessionAndOwnershipToModel(session, model, wishList);
 
         // if successful, add to model
         if (wishList != null && wishListItems != null) {
@@ -59,7 +61,7 @@ public class WishListController {
     }
 
     @GetMapping("/wish_item/{wishItemId}")
-    public String getWishItem(@PathVariable String wishItemId, Model model) {
+    public String getWishItem(@PathVariable String wishItemId, HttpSession session, Model model) {
         WishItem wishItem = service.getWishItem(wishItemId);
         WishList wishList;
 
@@ -70,6 +72,8 @@ public class WishListController {
             model.addAttribute("queryFailure", true);
             return "wish_item";
         }
+        // Add session info and ownership status to model
+        addSessionAndOwnershipToModel(session, model, wishList);
 
         if (wishList != null) {
             model.addAttribute("wishItem", wishItem);
@@ -252,7 +256,7 @@ public class WishListController {
 
         // Proceed with update
         if (service.updateWishItem(wishItem)) {
-            return "redirect:/wish_item/" + wishItem.getId();
+            return "redirect:/wish_list/" + wishItem.getWishListId();
         } else {
             model.addAttribute("wishItem", wishItem);
             model.addAttribute("updateFailure", true);
@@ -320,6 +324,20 @@ public class WishListController {
     private WishList getWishListIfOwner(String wishListId, HttpSession session) {
         WishList wishList = service.getWishList(wishListId);
         return isOwner(session, wishList) ? wishList : null;
+    }
+
+    // Adds session info and ownership status to the model for view permission checks
+    private void addSessionAndOwnershipToModel(HttpSession session, Model model, WishList wishList) {
+        boolean isLoggedIn = SessionUtil.isLoggedIn(session);
+        model.addAttribute("isLoggedIn", isLoggedIn);
+
+        if (isLoggedIn) {
+            String username = getCurrentUsername(session);
+            model.addAttribute("username", username);
+            model.addAttribute("isOwner", wishList != null && username.equals(wishList.getUsername()));
+        } else {
+            model.addAttribute("isOwner", false);
+        }
     }
 
 }
