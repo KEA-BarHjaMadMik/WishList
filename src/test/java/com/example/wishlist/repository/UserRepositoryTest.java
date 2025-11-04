@@ -39,36 +39,67 @@ class UserRepositoryTest {
     }
 
     @Test
-    void usernameExistsShouldBeTrue() {
+    void usernameShouldExist() {
         boolean usernameExists = repository.usernameExists("test_wisher");
 
         assertThat(usernameExists).isTrue();
     }
 
     @Test
-    void usernameExistsShouldBeFalse() {
+    void usernameShouldNotExist() {
         boolean usernameExists = repository.usernameExists("nonExistent");
 
         assertThat(usernameExists).isFalse();
     }
 
     @Test
-    void emailExistsShouldBeTrue() {
+    void emailShouldExist() {
         boolean emailExists = repository.emailExists("wisher@test.dk");
 
         assertThat(emailExists).isTrue();
     }
 
     @Test
-    void emailExistsShouldBeFalse() {
+    void emailShouldNotExist() {
         boolean emailExists = repository.emailExists("nonExistent");
 
         assertThat(emailExists).isFalse();
     }
 
     @Test
-    void registerUser() {
+    void shouldRegisterUser() {
         // arrange
+        User newUser = new User();
+        newUser.setUsername("newUser");
+        newUser.setEmail("newuser@test.dk");
+        newUser.setPassword("test123");
+
+        // act
+        boolean success = repository.registerUser(newUser);
+
+        // assert
+        assertThat(success).isTrue();
+
+        // verify user is added to DB
+        User fetched = repository.getUserByUsername("newUser");
+        assertThat(fetched).isNotNull();
+        assertThat(fetched.getEmail()).isEqualTo("newuser@test.dk");
+        assertThat(fetched.getPassword()).isEqualTo("test123");
+    }
+
+    @Test
+    void shouldNotRegisterUser() {
+        // arrange
+        User newUser = new User();
+        newUser.setUsername("test_wisher"); // username already taken
+        newUser.setEmail("newuser@test.dk");
+        newUser.setPassword("test123");
+
+        // act
+        boolean success = repository.registerUser(newUser);
+
+        // assert
+        assertThat(success).isFalse();
     }
 
     @Test
