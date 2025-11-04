@@ -34,15 +34,6 @@ public class UserRepository {
         return results.isEmpty() ? null : results.getFirst();
     }
 
-    private RowMapper<User> getUserRowMapper() {
-        return (rs, rowNum) -> new User(
-                rs.getString("username"),
-                rs.getString("password"),
-                rs.getString("email")
-        );
-    }
-
-
     public boolean usernameExists(String username) {
         String sql = "SELECT COUNT(*) FROM user_account WHERE username = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, username);
@@ -108,5 +99,13 @@ public class UserRepository {
             System.err.println("Database error during user deletion: " + e.getMessage());
             return false;
         }
+    }
+
+    private RowMapper<User> getUserRowMapper() {
+        return (rs, rowNum) -> new User(
+                rs.getString("username"),
+                rs.getString("password"),
+                rs.getString("email")
+        );
     }
 }
