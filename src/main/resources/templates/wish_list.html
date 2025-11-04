@@ -65,7 +65,7 @@
                     <span class="favourite-star" th:if="${wishListItem.favourite}">⭐</span>
                 </div>
                 <div class="wishlist-info">
-                    <span class="info-badge" th:if="${wishListItem.reserved}">🔒 Reserveret</span>
+                    <span class="info-badge" th:if="${wishListItem.reserved and !isOwner}">🔒 Reserveret</span>
                 </div>
                 <div class="wish-item-body">
                     <div class="wish-item-quantity">
