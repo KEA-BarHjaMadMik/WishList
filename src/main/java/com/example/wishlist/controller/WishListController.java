@@ -296,11 +296,6 @@ public class WishListController {
     }
 
     // Helper methods for authentication
-    // Checks if user is logged in, returns redirect if not
-//    private String requireLogin(HttpSession session) {
-//        return SessionUtil.isLoggedIn(session) ? null : "redirect:/login";
-//    }
-
     //Gets the current logged-in username from session
     private String getCurrentUsername(HttpSession session) {
         return (String) session.getAttribute("username");
@@ -316,20 +311,6 @@ public class WishListController {
         WishList wishList = service.getWishList(wishListId);
         return isOwner(session, wishList) ? wishList : null;
     }
-
-    // Adds session info and ownership status to the model for view permission checks
-//    private void addSessionAndOwnershipToModel(HttpSession session, Model model, WishList wishList) {
-//        boolean isLoggedIn = SessionUtil.isLoggedIn(session);
-//        model.addAttribute("isLoggedIn", isLoggedIn);
-//
-//        if (isLoggedIn) {
-//            String username = getCurrentUsername(session);
-//            model.addAttribute("username", username);
-//            model.addAttribute("isOwner", wishList != null && username.equals(wishList.getUsername()));
-//        } else {
-//            model.addAttribute("isOwner", false);
-//        }
-//    }
 
     // Adds only ownership info to model since isLoggedIn and username are global.
     private void addOwnershipToModel(HttpSession session, Model model, WishList wishList) {

@@ -31,22 +31,10 @@ class WishListControllerTest {
 
     private MockHttpSession session;
 
-//    private List<WishList> wishList;
-//    private LocalDate eventDate;
-//    private WishItem wishItem;
-//    private WishList userWishList;
-
-
     @BeforeEach
     void setUp() {
         session = new MockHttpSession();
         session.setAttribute("username", "test_wisher");
-
-//        eventDate = LocalDate.parse("2030-12-12");
-//        wishList = new ArrayList<>();
-//        wishList.add(new WishList(1, "test_wisher", "test", "1", eventDate, false));
-//        wishList.add(new WishList(2, "test_wisher", "test2", "2", eventDate, true));
-//        wishItem = new WishItem(1, 1, "test item", true, "a test item", 0.00, 2, "", true, "test_wishee");
     }
 
     @AfterEach
