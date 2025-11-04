@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ønske - Wish item</title>
+    <link th:href="@{/css/main.css}" rel="stylesheet">
+    <link th:href="@{/css/halloween.css}" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}">...</div>
+<main>
+    <div class="content_wrapper" th:if="${wishList.notPublic and (!isLoggedIn or !username.equals(wishList.username))}">
+        <div class="error-state">
+            <div class="error-state-icon">🔒</div>
+            <h1 class="error">Ingen adgang</h1>
+            <p class="error">Du har ikke tilladelse til at se dette ønske</p>
+            <a class="button-link" th:href="@{/}">← Tilbage til forsiden</a>
+        </div>
+    </div>
+    <div class="content_wrapper"
+         th:unless="${wishList.notPublic and (!isLoggedIn or !username.equals(wishList.username))}">
+        <div class="page-header">
+            <div>
+                <h1 th:text="${wishItem.title}">Wish Item Title</h1>
+                <div class="wishlist-info">
+                    <span class="info-badge" th:if="${wishItem.reserved}">🔒 Reserveret</span>
+                    <span class="info-badge" th:if="${wishItem.reserved and wishItem.reservedBy != null and isOwner}">
+                        👤 Reserveret af: <span th:text="${wishItem.reservedBy}">username</span>
+                    </span>
+                </div>
+            </div>
+            <div>
+                <a class="button-link" th:href="@{/wish_list/{wishListId}(wishListId=${wishList.id})}">← Tilbage</a>
+                <a class="button-link" th:if="${isOwner}" th:href="@{/edit_wish_item/{wishItemId}(wishItemId=${wishItem.id})}">🔧 Rediger</a>
+            </div>
+        </div>
+
+        <div class="error" th:if="${queryFailure}">Noget gik galt. Prøv igen.</div>
+
+        <div>
+            <div th:if="${wishItem.description != null && !wishItem.description.isEmpty()}">
+                <h2>Beskrivelse</h2>
+                <p th:text="${wishItem.description}">Description</p>
+            </div>
+
+            <div th:if="${wishItem.price != 0}">
+                <h2>Pris</h2>
+                <p th:text="${#numbers.formatDecimal(wishItem.price, 1, 2)} + ' kr.'">Price</p>
+            </div>
+
+            <div th:if="${wishItem.quantity != 0}">
+                <h2>Antal</h2>
+                <p th:text="${#numbers.formatInteger(wishItem.quantity, 1)}">Quantity</p>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-bar">
+            <a class="button-link" th:if="${wishItem.link != null}" th:href="${wishItem.link}" target="_blank">Gå til
+                butik ↗️</a>
+
+            <!-- Reserve button for non-owners -->
+            <form th:if="${!isOwner and isLoggedIn and !wishItem.reserved}"
+                  th:action="@{/reserve_wish_item/{wishItemId}(wishItemId=${wishItem.id})}" method="post" style="display: inline;">
+                <button type="submit" class="button-reserve">
+                    Reserver dette ønske
+                </button>
+            </form>
+
+            <!-- Unreserve button for the person who reserved it -->
+            <form th:if="${!isOwner and isLoggedIn and wishItem.reserved and wishItem.reservedBy != null and wishItem.reservedBy.equals(username)}"
+                  th:action="@{/unreserve_wish_item/{wishItemId}(wishItemId=${wishItem.id})}" method="post" style="display: inline;">
+                <button type="submit" class="button-unreserve">
+                    Annuller reservering
+                </button>
+            </form>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

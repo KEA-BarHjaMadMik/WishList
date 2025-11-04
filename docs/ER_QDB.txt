@@ -1,0 +1,27 @@
+user_account
+---
+username varchar(15) PK
+password varchar(30)
+email varchar(254) UNIQUE
+
+wish_list
+---
+id int PK
+username varchar(15) FK >0- user_account.username
+title varchar(100)
+description varchar(800) NULL
+eventdate date NULL
+private boolean
+
+wish_item
+---
+id int PK
+wish_list_id int FK >0- wish_list.id
+title varchar(100)
+favorite boolean
+description varchar(800) NULL
+price decimal NULL
+quantity int
+link varchar(400) NULL
+reserved boolean
+reserved_by varchar(15) NULL FK >0- user_account.username

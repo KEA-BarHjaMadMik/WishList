@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fragment</title>
+</head>
+<body>
+<div th:fragment="header">
+    <header class="site-header">
+        <div class="header-container">
+            <div class="logo-section">
+                <a th:href="@{/}">
+                    <img id="logo" src="/images/logo.png" alt="Logo" class="logo-img"/>
+                </a>
+            </div>
+
+            <nav class="main-nav">
+                <a th:if="${isLoggedIn}" th:href="@{/wish_lists}" class="nav-link">
+                    <span class="nav-text">Ønskesedler</span>
+                </a>
+            </nav>
+
+            <div th:unless="${isLoggedIn}">
+                <a class="button-link"  th:href="@{/login}">Log på</a>
+            </div>
+
+            <div th:if="${isLoggedIn}">
+                <p>Velkommen, <a th:href="@{/user_admin}"><span th:text="${username}">User</span></a>!</p>
+                <a class="button-link" th:href="@{/logout}">Log ud</a>
+            </div>
+        </div>
+    </header>
+</div>
+</body>
+</html>

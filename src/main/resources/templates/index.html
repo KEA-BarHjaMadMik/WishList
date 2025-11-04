@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Forside - WishList</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎃</text></svg>">
+    <link th:href="@{/css/main.css}" rel="stylesheet">
+    <link th:href="@{/css/halloween.css}" rel="stylesheet">
+</head>
+<body>
+    <div th:replace="~{fragments/header :: header}">...</div>
+    <main class="homepage">
+        <div class="content_wrapper">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">Din ønskeseddel til alle årets begivenheder</h1>
+                <p class="hero-subtitle">Opret, del og administrer dine ønskesedler nemt og overskueligt. Perfekt til fødselsdage, jul, bryllupper og meget mere!</p>
+                <div class="hero-actions">
+                    <a class="button-link large" th:href="@{/register_user}" th:unless="${isLoggedIn}">Kom i gang gratis</a>
+                    <a class="button-link large" th:href="@{/wish_lists}" th:if="${isLoggedIn}">Se dine ønskesedler</a>
+                    <a class="button-secondary large" th:href="@{/login}" th:unless="${isLoggedIn}">Log ind</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-card">
+                    <div class="card-icon">🎁</div>
+                    <div class="card-text">
+                        <strong>Fødselsdagsønsker</strong>
+                    </div>
+                </div>
+                    <div class="floating-card">
+                    <div class="card-icon">🎄</div>
+                    <div class="card-text">
+                        <strong>Juleønsker</strong>
+                    </div>
+                </div>
+                <div class="floating-card">
+                    <div class="card-icon">💍</div>
+                    <div class="card-text">
+                        <strong>Bryllupsønsker</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <h2 class="section-title">Hvorfor vælge vores ønskeseddel?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">✨</div>
+                    <h3>Nemt og intuitivt</h3>
+                    <p>Opret og administrer dine ønskesedler på få minutter med vores brugervenlige interface</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔗</div>
+                    <h3>Del med alle</h3>
+                    <p>Send dine ønskesedler til familie og venner med et simpelt link</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Privat eller offentlig</h3>
+                    <p>Vælg selv om din ønskeseddel skal være privat eller tilgængelig for alle</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⭐</div>
+                    <h3>Marker favoritter</h3>
+                    <p>Fremhæv dine vigtigste ønsker så andre ved hvad du helst vil have</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📅</div>
+                    <h3>Flere begivenheder</h3>
+                    <p>Opret forskellige ønskesedler til alle årets festlige lejligheder</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💝</div>
+                    <h3>Helt gratis</h3>
+                    <p>Brug alle funktioner uden at betale - det er vores gave til dig</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section" th:unless="${isLoggedIn}">
+            <h2>Klar til at komme i gang?</h2>
+            <p>Opret din første ønskeseddel i dag - det tager kun få sekunder</p>
+            <a class="button-link large" th:href="@{/register_user}">Opret gratis konto</a>
+        </section>
+        </div>
+    </main>
+    <div th:replace="~{fragments/footer :: footer}">...</div>
+</body>
+</html>

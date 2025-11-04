@@ -1,0 +1,469 @@
+/* HALLOWEEN THEME
+-------------------------------------------- */
+
+/* Halloween Color Palette */
+:root {
+    --primary-orange: #FF6B35;
+    --accent-purple: #6B2D5C;
+    --dark-purple: #4A1942;
+    --halloween-green: #7FB800;
+    --spooky-black: #1a1a1a;
+    --ghost-white: #F5F5F5;
+    --pumpkin-orange: #FF8C42;
+    --witch-purple: #9B4F96;
+    --background-dark: #2a2a2a;
+    --text-light: #f0f0f0;
+    --text-dark: #1a1a1a;
+    --border-dark: #3a3a3a;
+    --shadow-orange: 0 2px 8px rgba(255, 107, 53, 0.2);
+    --shadow-md-orange: 0 8px 24px rgba(255, 107, 53, 0.3);
+    --shadow-lg-orange: 0 12px 40px rgba(255, 107, 53, 0.4);
+}
+
+/* Global Overrides */
+body {
+    background-color: var(--background-dark);
+    color: var(--text-light);
+}
+
+/* Headings */
+h1 {
+    color: var(--primary-orange);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+h2, h3 {
+    color: var(--pumpkin-orange);
+}
+
+/* Buttons */
+button, .button-link {
+    background: linear-gradient(135deg, var(--primary-orange), var(--witch-purple));
+    box-shadow: var(--shadow-orange);
+}
+
+button:hover, .button-link:hover {
+    box-shadow: var(--shadow-md-orange);
+    filter: brightness(1.1);
+}
+
+.button-secondary {
+    background: linear-gradient(135deg, var(--primary-orange), var(--witch-purple));
+    color: var(--white) !important;
+    border: none;
+}
+
+.button-secondary:hover {
+    box-shadow: var(--shadow-md-orange);
+    filter: brightness(1.1);
+}
+
+/* Header */
+.site-header {
+    background-color: var(--spooky-black);
+    border-bottom: 2px solid var(--primary-orange);
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.nav-link {
+    color: var(--text-light);
+}
+
+.nav-link:hover {
+    color: var(--primary-orange);
+}
+
+.nav-link::after {
+    background: linear-gradient(135deg, var(--primary-orange), var(--witch-purple));
+}
+
+.header-container a {
+    color: var(--primary-orange);
+}
+
+.header-container a:hover {
+    color: var(--pumpkin-orange);
+}
+
+.header-container > div:last-child {
+    color: var(--text-light);
+}
+
+/* Main Content */
+main {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a1a2a 100%);
+}
+
+main .content_wrapper {
+    background: rgba(26, 26, 26, 0.95);
+    border: 2px solid var(--primary-orange);
+    box-shadow: 0 0 30px rgba(255, 107, 53, 0.3);
+}
+
+/* Forms */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+input[type="number"],
+input[type="url"],
+select,
+textarea {
+    background: var(--spooky-black);
+    color: var(--text-light);
+    border: 2px solid var(--border-dark);
+}
+
+input[type="checkbox"] {
+    accent-color: var(--primary-orange);
+    width: 20px;
+    height: 20px;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="date"]:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+}
+
+label {
+    color: var(--text-light);
+}
+
+/* Cards */
+.wishlist-card,
+.wish-item-card,
+.feature-card,
+.floating-card {
+    background: rgba(26, 26, 26, 0.9);
+    border: 2px solid var(--border-dark);
+    box-shadow: var(--shadow-orange);
+}
+
+.wishlist-card:hover,
+.wish-item-card:hover {
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 20px rgba(255, 107, 53, 0.4);
+}
+
+.floating-card:hover {
+    box-shadow: 0 0 25px rgba(255, 107, 53, 0.5);
+    border-color: var(--primary-orange);
+}
+
+.wishlist-card-header h3,
+.wish-item-header h3 {
+    color: var(--primary-orange);
+}
+
+.wish-item-card.favourite {
+    border-color: var(--witch-purple);
+    background: linear-gradient(to bottom right, rgba(26, 26, 26, 0.9), rgba(107, 45, 92, 0.2));
+}
+
+/* Badges */
+.visibility-badge {
+    background: linear-gradient(135deg, var(--primary-orange), var(--witch-purple));
+}
+
+.visibility-badge.public {
+    background: linear-gradient(135deg, var(--halloween-green), #5a8f00);
+}
+
+.info-badge,
+.meta-item {
+    background: var(--spooky-black);
+    color: var(--text-light);
+    border: 1px solid var(--border-dark);
+}
+
+/* Descriptions and Text */
+.wishlist-description,
+.wishlist-subtitle,
+.hero-subtitle,
+.feature-card p {
+    color: #c0c0c0;
+}
+
+.wishlist-subtitle {
+    border-bottom: 1px solid var(--border-dark);
+    padding-bottom: 0.75rem;
+}
+
+.card-text strong {
+    color: var(--primary-orange);
+}
+
+.card-text span {
+    color: #a0a0a0;
+}
+
+/* Links */
+.card-button {
+    color: var(--primary-orange);
+}
+
+.card-button:hover {
+    color: var(--pumpkin-orange);
+}
+
+a {
+    color: var(--primary-orange);
+}
+
+a:hover {
+    color: var(--pumpkin-orange);
+}
+
+/* Page Header */
+.page-header {
+    border-bottom: 2px solid var(--border-dark);
+}
+
+/* Empty State */
+.empty-state {
+    color: #c0c0c0;
+}
+
+.empty-state h2 {
+    color: var(--primary-orange);
+}
+
+/* Error and Success Messages */
+.error {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.1);
+    padding: 0.75rem;
+    border-radius: 8px;
+    border-left: 4px solid #ff6b6b;
+}
+
+.success {
+    color: var(--halloween-green);
+    background: rgba(127, 184, 0, 0.1);
+    padding: 0.75rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--halloween-green);
+}
+
+/* Error State */
+.error-state {
+    color: var(--text-light);
+}
+
+.error-state h1 {
+    color: #ff6b6b;
+}
+
+/* Homepage Hero */
+.hero-title {
+    background: linear-gradient(135deg, var(--primary-orange), var(--pumpkin-orange), var(--witch-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 10px rgba(255, 107, 53, 0.3));
+}
+
+/* Features */
+.section-title {
+    color: var(--primary-orange);
+}
+
+.feature-card h3 {
+    color: var(--pumpkin-orange);
+}
+
+.feature-card:hover {
+    background: rgba(255, 107, 53, 0.1);
+}
+
+.feature-icon {
+    filter: drop-shadow(0 0 5px rgba(255, 107, 53, 0.5));
+}
+
+/* CTA Section */
+.cta-section {
+    background: linear-gradient(135deg, var(--primary-orange), var(--dark-purple));
+}
+
+.cta-section .button-link {
+    background: var(--spooky-black);
+    color: var(--primary-orange) !important;
+    border: 2px solid var(--primary-orange);
+}
+
+.cta-section .button-link:hover {
+    background: var(--primary-orange);
+    color: var(--spooky-black) !important;
+}
+
+/* Form Pages */
+.form-page .content_wrapper {
+    background: rgba(26, 26, 26, 0.95);
+}
+
+.form-container {
+    background: rgba(26, 26, 26, 0.95);
+}
+
+.form-header {
+    border-bottom: 2px solid var(--border-dark);
+}
+
+.form-header h1 {
+    color: var(--primary-orange);
+}
+
+.form-header p {
+    color: #c0c0c0;
+}
+
+.form-footer p {
+    color: #c0c0c0;
+}
+
+/* Delete action section */
+form + form {
+    border-top: 2px solid var(--border-dark);
+}
+
+/* Settings Page */
+.section-header h2 {
+    color: var(--primary-orange);
+}
+
+.section-header p {
+    color: #c0c0c0;
+}
+
+.settings-section {
+    border-bottom: 2px solid var(--border-dark);
+}
+
+/* Danger Zone - Extra Spooky! */
+.danger-zone {
+    background: rgba(107, 45, 92, 0.2);
+    border: 2px solid var(--witch-purple);
+}
+
+.danger-warning {
+    background: rgba(255, 107, 53, 0.1);
+    border-left: 4px solid var(--primary-orange);
+}
+
+.button-danger {
+    background: linear-gradient(135deg, #e74c3c, var(--dark-purple));
+}
+
+.button-danger:hover {
+    filter: brightness(1.1);
+    box-shadow: var(--shadow-md-orange);
+}
+
+.button-reserve {
+    background: linear-gradient(135deg, var(--halloween-green), #5a8f00);
+}
+
+.button-reserve:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 0 15px rgba(127, 184, 0, 0.5);
+}
+
+.button-unreserve {
+    background: linear-gradient(135deg, var(--primary-orange), var(--pumpkin-orange));
+}
+
+.button-unreserve:hover {
+    filter: brightness(1.1);
+    box-shadow: var(--shadow-md-orange);
+}
+
+/* Quantity and Price Display */
+.quantity-value,
+.price-value {
+    color: var(--primary-orange);
+}
+
+.wish-item-quantity,
+.wish-item-price {
+    background: var(--spooky-black);
+    border: 1px solid var(--border-dark);
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+}
+
+.price-label,
+.quantity-label {
+    color: #c0c0c0;
+}
+
+.external-link-badge {
+    background: linear-gradient(135deg, var(--primary-orange), var(--witch-purple));
+    color: var(--white) !important;
+}
+
+.external-link-badge:hover {
+    filter: brightness(1.2);
+    box-shadow: 0 0 10px rgba(255, 107, 53, 0.4);
+}
+
+/* Action Bar */
+.action-bar {
+    border-top: 2px solid var(--border-dark);
+}
+
+/* Spooky Animations */
+@keyframes spooky-glow {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(255, 107, 53, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 107, 53, 0.6);
+    }
+}
+
+.floating-card {
+    animation: float 6s ease-in-out infinite, spooky-glow 3s ease-in-out infinite;
+}
+
+/* Favourite Star - Make it spookier */
+.favourite-star {
+    filter: drop-shadow(0 0 5px rgba(255, 107, 53, 0.8));
+}
+
+/* Halloween specific decorations */
+body::before {
+    content: "🎃";
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 3rem;
+    opacity: 0.3;
+    z-index: 0;
+    animation: float 4s ease-in-out infinite;
+}
+
+body::after {
+    content: "👻";
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    font-size: 3rem;
+    opacity: 0.3;
+    z-index: 0;
+    animation: float 5s ease-in-out infinite reverse;
+}
+
+/* Footer */
+.site-footer {
+    background: var(--spooky-black);
+    border-top: 2px solid var(--primary-orange);
+}
+
+.footer-container p {
+    color: #a0a0a0;
+}
