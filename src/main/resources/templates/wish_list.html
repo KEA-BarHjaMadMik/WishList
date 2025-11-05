@@ -11,18 +11,6 @@
 <body>
 <div th:replace="~{fragments/header :: header}">...</div>
 <main>
-    <!-- Flash messages -->
-    <div class="flash-messages">
-        <div class="alert error" th:if="${reservationFailure}">
-            ❌ Noget gik galt under reserveringen. Prøv igen.
-        </div>
-        <div class="alert warning" th:if="${alreadyReserved}">
-            ⚠️ Dette ønske er allerede reserveret af en anden.
-        </div>
-        <div class="alert warning" th:if="${unauthorizedUnreserve}">
-            ⚠️ Du kan kun annullere dine egne reservationer.
-        </div>
-    </div>
 
     <!-- Access Denied -->
     <div class="content_wrapper" th:if="${wishList.notPublic and (!isLoggedIn or !username.equals(wishList.username))}">
@@ -37,10 +25,24 @@
     <!-- Wish List Content -->
     <div class="content_wrapper"
          th:unless="${wishList.notPublic and (!isLoggedIn or !username.equals(wishList.username))}">
+        <!-- Flash messages -->
+        <div class="flash-messages">
+            <div class="alert error" th:if="${reservationFailure}">
+                ❌ Noget gik galt under reserveringen. Prøv igen.
+            </div>
+            <div class="alert warning" th:if="${alreadyReserved}">
+                ⚠️ Dette ønske er allerede reserveret af en anden.
+            </div>
+            <div class="alert warning" th:if="${unauthorizedUnreserve}">
+                ⚠️ Du kan kun annullere dine egne reservationer.
+            </div>
+        </div>
+
         <div class="page-header">
             <div>
                 <h1 th:text="${wishList.title}">Wish List Title</h1>
-                <p class="wishlist-subtitle" th:if="${wishList.description != null and !wishList.description.isEmpty()}" th:text="${wishList.description}">
+                <p class="wishlist-subtitle" th:if="${wishList.description != null and !wishList.description.isEmpty()}"
+                   th:text="${wishList.description}">
                     Description</p>
                 <div class="wishlist-info">
                     <span class="info-badge" th:if="${wishList.eventDate != null}">
@@ -87,10 +89,12 @@
                     </div>
                     <div class="wish-item-price" th:if="${wishListItem.price != 0}">
                         <span class="price-label">Pris:</span>
-                        <span class="price-value" th:text="${#numbers.formatDecimal(wishListItem.price, 1, 2)} + ' kr.'">0.00 kr.</span>
+                        <span class="price-value"
+                              th:text="${#numbers.formatDecimal(wishListItem.price, 1, 2)} + ' kr.'">0.00 kr.</span>
                     </div>
                     <div class="wish-item-link" th:if="${wishListItem.link != null and !wishListItem.link.isEmpty()}">
-                        <a th:href="${wishListItem.link}" target="_blank" class="external-link-badge">🔗 Link til butik</a>
+                        <a th:href="${wishListItem.link}" target="_blank" class="external-link-badge">🔗 Link til
+                            butik</a>
                     </div>
                 </div>
                 <div class="wish-item-footer">
@@ -103,10 +107,10 @@
 
                     <form th:if="${isOwner}"
                           th:action="@{/delete_wish_item/{wishItemId}(wishItemId=${wishListItem.id})}" method="post">
-                            <button type="submit" class="button-secondary small"
-                                    onclick="return confirm('Er du sikker på at du vil slette ønsket? Denne handling kan ikke fortrydes!')">
-                                Slet
-                            </button>
+                        <button type="submit" class="button-secondary small"
+                                onclick="return confirm('Er du sikker på at du vil slette ønsket? Denne handling kan ikke fortrydes!')">
+                            Slet
+                        </button>
                     </form>
 
                     <!-- Non-owner reserve buttons -->
@@ -129,7 +133,8 @@
 
         <!-- Action Buttons -->
         <div class="action-bar" th:if="${!wishListItems.isEmpty() and isOwner}">
-            <a class="button-link" th:href="@{/wish_list/{wishListId}/add_wish_item(wishListId=${wishList.id})}">+ Tilføj ønske</a>
+            <a class="button-link" th:href="@{/wish_list/{wishListId}/add_wish_item(wishListId=${wishList.id})}">+
+                Tilføj ønske</a>
         </div>
     </div>
 </main>
