@@ -11,6 +11,19 @@
 <body>
 <div th:replace="~{fragments/header :: header}">...</div>
 <main>
+    <!-- Flash messages -->
+    <div class="flash-messages">
+        <div class="alert error" th:if="${reservationFailure}">
+            ❌ Noget gik galt under reserveringen. Prøv igen.
+        </div>
+        <div class="alert warning" th:if="${alreadyReserved}">
+            ⚠️ Dette ønske er allerede reserveret af en anden.
+        </div>
+        <div class="alert warning" th:if="${unauthorizedUnreserve}">
+            ⚠️ Du kan kun annullere dine egne reservationer.
+        </div>
+    </div>
+
     <!-- Access Denied -->
     <div class="content_wrapper" th:if="${wishList.notPublic and (!isLoggedIn or !username.equals(wishList.username))}">
         <div class="error-state">
