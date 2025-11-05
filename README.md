@@ -6,7 +6,10 @@
 - Mikkel Nørgaard Broholm
 
 **Docs:**
-[Klassediagram](docs/klassediagram.pdf)
+- [Klassediagram](docs/klassediagram.pdf)
+- [ER diagram](docs/ER_diagram.png)
+- [Præsentation - IT- og forretudvikling](docs/ITF-Præsentation.pptx)
+- [Qodana skærmbillede](docs/qodana.png)
 
 **Test Brugere:**
 - Brugernavn: test_wisher
