@@ -85,6 +85,32 @@ textarea {
     font-weight: 600;
 }
 
+/* Flash messages */
+.flash-messages {
+    display: block;
+    max-width: 800px;
+}
+
+.alert {
+    padding: 0.8rem 1.2rem;
+    border-radius: 4px;
+    margin-bottom: 0.8rem;
+    font-weight: 500;
+}
+
+.alert.error {
+    background-color: #ffdddd;
+    color: #b20000;
+    border: 1px solid #b20000;
+}
+
+.alert.warning {
+    background-color: #fff7e6;
+    color: #a66a00;
+    border: 1px solid #a66a00;
+}
+
+
 /* Buttons */
 button, .button-link, .submit-button, .button-secondary, .button-danger, .button-reserve, .button-unreserve {
     display: inline-block;

@@ -291,8 +291,58 @@ public class WishListController {
             return "redirect:/wish_list/" + wishListId;
         } else {
             model.addAttribute("deleteFailure", true);
-            return "wish_list";
+            return "redirect:/wish_list/" + wishListId;
         }
+    }
+
+    @PostMapping("/reserve_wish_item/{wishItemId}")
+    public String reserveWishItem(HttpSession session,
+                                  @PathVariable String wishItemId,
+                                  RedirectAttributes redirectAttributes) {
+        if (!SessionUtil.isLoggedIn(session)) return "redirect:/login";
+
+        WishItem wishItem = service.getWishItem(wishItemId);
+        if (wishItem == null) return "redirect:/";
+
+        // check not already reserved
+        if (wishItem.isReserved()) {
+            redirectAttributes.addFlashAttribute("alreadyReserved", true);
+            return "redirect:/wish_list/" + wishItem.getWishListId();
+        }
+
+        // proceed
+        wishItem.setReserved(true);
+        wishItem.setReservedBy(getCurrentUsername(session));
+        if (!service.updateWishItem(wishItem)) {
+            redirectAttributes.addFlashAttribute("reservationFailure", true);
+        }
+        return "redirect:/wish_list/" + wishItem.getWishListId();
+    }
+
+    @PostMapping("/unreserve_wish_item/{wishItemId}")
+    public String unreserveWishItem (HttpSession session,
+                                     @PathVariable String wishItemId,
+                                     RedirectAttributes redirectAttributes) {
+        if (!SessionUtil.isLoggedIn(session)) return "redirect:/login";
+
+        WishItem wishItem = service.getWishItem(wishItemId);
+        if (wishItem == null) return "redirect:/";
+
+        // check that item not reserved by different user
+        String currentUser = getCurrentUsername(session);
+        String reservedBy = wishItem.getReservedBy();
+        if (reservedBy == null || !reservedBy.equals(currentUser)) {
+            redirectAttributes.addFlashAttribute("unauthorizedUnreserve", true);
+            return "redirect:/wish_list/" + wishItem.getWishListId();
+        }
+
+        // proceed
+        wishItem.setReserved(false);
+        wishItem.setReservedBy(null);
+        if (!service.updateWishItem(wishItem)) {
+            redirectAttributes.addFlashAttribute("reservationFailure", true);
+        }
+        return "redirect:/wish_list/" + wishItem.getWishListId();
     }
 
     // Helper methods for authentication
