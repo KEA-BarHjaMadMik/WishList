@@ -27,6 +27,9 @@
          th:unless="${wishList.notPublic and (!isLoggedIn or !username.equals(wishList.username))}">
         <!-- Flash messages -->
         <div class="flash-messages">
+            <div class="alert error" th:if="${queryFailure}">
+                ❌ Noget gik galt. Prøv igen.
+            </div>
             <div class="alert error" th:if="${reservationFailure}">
                 ❌ Noget gik galt under reserveringen. Prøv igen.
             </div>
@@ -58,8 +61,6 @@
                    th:href="@{/edit_wish_list/{wishListId}(wishListId = ${wishList.id})}">🔧 Rediger</a>
             </div>
         </div>
-
-        <div class="error" th:if="${queryFailure}">Noget gik galt. Prøv igen.</div>
 
         <!-- Empty State for No Items -->
         <div class="empty-state" th:if="${wishListItems.isEmpty()}">
