@@ -12,9 +12,7 @@
 - [Qodana skærmbillede](docs/qodana.png)
 
 **Test Brugere:**
-test_wisher
 - Brugernavn: test_wisher
 - Password: test123
-test_wishee
 - Brugernavn: test_wishee
 - Password: test123
