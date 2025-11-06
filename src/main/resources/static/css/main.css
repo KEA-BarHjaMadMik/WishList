@@ -820,7 +820,7 @@ form + form .button-danger {
     background: var(--white);
     border-top: 2px solid var(--border-light);
     padding: 2rem;
-    margin-top: 4rem;
+    margin-top: 0;
 }
 
 .footer-container {
