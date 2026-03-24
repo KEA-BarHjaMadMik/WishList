@@ -69,7 +69,7 @@ public class UserController {
 
 
     @PostMapping("/register_user")
-    public String registerUser(@Valid @ModelAttribute User user,
+    public String registerUser(@Valid @ModelAttribute User newUser,
                                BindingResult bindingResult,
                                @RequestParam("confirmPassword") String confirmPassword,
                                Model model) {
@@ -78,30 +78,31 @@ public class UserController {
         boolean fieldsHaveErrors = bindingResult.hasErrors();
 
         // Check if username is free
-        boolean usernameTaken = service.usernameExists(user.getUsername());
+        boolean usernameTaken = service.usernameExists(newUser.getUsername());
         if (usernameTaken) {
             model.addAttribute("usernameTaken", true);
         }
 
         // Check if email is free
-        boolean emailTaken = service.emailExists(user.getEmail());
+        boolean emailTaken = service.emailExists(newUser.getEmail());
         if (emailTaken) {
             model.addAttribute("emailTaken", true);
         }
 
         // Check if passwords match
-        boolean passwordMismatch = !user.getPassword().equals(confirmPassword);
+        boolean passwordMismatch = !newUser.getPassword().equals(confirmPassword);
         if (passwordMismatch) {
             model.addAttribute("passwordMismatch", true);
         }
 
         // If validation failed, return to form
         if (fieldsHaveErrors || usernameTaken || emailTaken || passwordMismatch) {
+            model.addAttribute("newUser", newUser);
             return "user_registration_form";
         }
 
         // Proceed with saving the username
-        if (service.registerUser(user)) {
+        if (service.registerUser(newUser)) {
             return "redirect:/login";
         } else {
             model.addAttribute("registrationFailure", true);
